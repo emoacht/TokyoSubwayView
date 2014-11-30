@@ -1,0 +1,352 @@
+﻿<Page
+	x:Class="TokyoSubwayView.Views.MainPage"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:i="using:Microsoft.Xaml.Interactivity"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"	
+	mc:Ignorable="d"
+	xmlns:views="using:TokyoSubwayView.Views"
+	xmlns:viewModels="using:TokyoSubwayView.ViewModels"
+	xmlns:behaviors="using:TokyoSubwayView.Views.Behaviors"
+	xmlns:controls="using:TokyoSubwayView.Views.Controls"
+	x:Name="PageRoot">
+	<Page.DataContext>
+		<viewModels:MainPageViewModel/>
+	</Page.DataContext>
+
+	<Page.Resources>
+		<ControlTemplate x:Key="CreatedTimeTemplate" TargetType="ContentControl">
+			<TextBlock Margin="8,1"
+					   Foreground="{Binding Op.ElapsedTime, Mode=OneWay, Converter={StaticResource TimeSpanToBrushConverterKey}, ConverterParameter=10}"
+					   FontSize="16"
+					   IsHitTestVisible="False">
+				<Run Text="{Binding Op.CreatedTime, Mode=OneWay, Converter={StaticResource DateTimeOffsetToStringConverterKey}}"/>
+				<Run Text="+"/>
+				<Run Text="{Binding Op.ElapsedTime, Mode=OneWay, Converter={StaticResource TimeSpanToStringConverterKey}}"/>
+			</TextBlock>
+		</ControlTemplate>
+	</Page.Resources>
+
+	<Page.TopAppBar>
+		<AppBar Background="{StaticResource App.AppBarBrush}"
+				BorderBrush="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background}">
+			<Grid>
+				<StackPanel HorizontalAlignment="Left" VerticalAlignment="Center"
+							Orientation="Horizontal">
+					<TextBlock
+						x:Uid="AppTitle"
+						Margin="30,0,0,0" VerticalAlignment="Center" 
+						IsHitTestVisible="false"
+						Visibility="{Binding HasEnoughWidth, Converter={StaticResource BooleanToVisibilityConverterKey}}"
+						FontSize="48" FontWeight="Light" LineHeight="30"
+						TextWrapping="NoWrap"
+						Text="Subway View"/>
+
+					<StackPanel Margin="30,0,0,0"
+								Orientation="Horizontal">
+						<AppBarToggleButton
+							x:Uid="ZoomInButton"
+							Icon="ZoomIn"
+							Label="Zoom In"
+							ToolTipService.ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Label}"
+							IsCompact="True"
+							IsChecked="{Binding Path=ZoomDirection, Converter={StaticResource ZoomDirectionModeToBooleanConverterKey}, ConverterParameter=ZoomIn, Mode=TwoWay}"/>
+						<AppBarToggleButton
+							x:Uid="ZoomOutButton"
+							Icon="ZoomOut"
+							Label="Zoom Out"
+							ToolTipService.ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Label}"
+							IsCompact="True"
+							IsChecked="{Binding Path=ZoomDirection, Converter={StaticResource ZoomDirectionModeToBooleanConverterKey}, ConverterParameter=ZoomOut, Mode=TwoWay}"/>
+						<AppBarButton
+							x:Uid="OptionsButton"
+							Icon="Setting"
+							Label="Settings"
+							ToolTipService.ToolTip="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Label}"
+							IsCompact="True"
+							Command="{Binding ShowOptionsCommand}"/>
+					</StackPanel>
+				</StackPanel>
+				<Grid HorizontalAlignment="Right" VerticalAlignment="Top">
+					<ContentControl Template="{StaticResource CreatedTimeTemplate}"/>
+				</Grid>
+			</Grid>
+		</AppBar>
+	</Page.TopAppBar>
+
+	<Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+		<Grid.ChildrenTransitions>
+			<TransitionCollection>
+				<EntranceThemeTransition/>
+			</TransitionCollection>
+		</Grid.ChildrenTransitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<Grid Grid.Row="0"
+			  x:Name="PageHeader">
+			<Border Height="20" VerticalAlignment="Top"
+					Background="{StaticResource App.AppBarBrush}"
+					Tapped="PageHeader_Tapped">
+				<StackPanel HorizontalAlignment="Right" VerticalAlignment="Center"
+							Orientation="Horizontal">
+					<ContentControl Template="{StaticResource CreatedTimeTemplate}"/>
+				</StackPanel>
+			</Border>
+		</Grid>
+
+		<Grid Grid.Row="1"
+			  x:Name="PageBody">
+			<Grid.Resources>
+				<DataTemplate x:Key="TrainItemTemplate">
+					<Grid Background="{Binding RailwayId, Converter={StaticResource RailwayIdToBrushConverterKey}}">
+						<Border BorderBrush="{Binding State, Converter={StaticResource TrainStateToBrushConverterKey}}"
+							   BorderThickness="4">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="120"/>
+									<ColumnDefinition Width="100"/>
+									<ColumnDefinition Width="120"/>
+									<ColumnDefinition Width="80"/>
+								</Grid.ColumnDefinitions>
+
+								<TextBlock Grid.Column="0"
+										   Margin="2"
+										   Foreground="White"
+										   FontSize="18" TextWrapping="Wrap"
+										   Text="{Binding RailwayDescription}"/>
+								<TextBlock Grid.Column="1"
+										   Margin="2"
+										   Foreground="White"
+										   FontSize="18" TextWrapping="Wrap"
+										   Text="{Binding TrainTypeDescription}"/>
+								<TextBlock Grid.Column="2"
+										   Margin="2"
+										   Foreground="White"
+										   FontSize="18" TextWrapping="Wrap">
+									<Run Text="{Binding RailDirectionDescription}"/>
+									<LineBreak/>
+									<Run Text="{Binding TerminalStationDescription}"/>
+								</TextBlock>
+								<TextBlock Grid.Column="3"
+										   Margin="2"
+										   Foreground="White"
+										   FontSize="18" TextWrapping="Wrap"
+										   Text="{Binding Note}"/>
+							</Grid>
+						</Border>
+					</Grid>
+				</DataTemplate>
+
+				<DataTemplate x:Key="StationGroupTemplate">
+					<Grid>
+						<controls:StationGroupMember
+							Diameter="{Binding Diameter}"
+							State="{Binding State}"
+							ToolTipService.ToolTip="{Binding StationGroupDescription}"
+							IsLoaded="{Binding IsLoaded, Mode=TwoWay}"
+							Tapped="CanvasItem_Tapped">
+
+							<FlyoutBase.AttachedFlyout>
+								<Flyout Placement="Bottom">
+									<Flyout.FlyoutPresenterStyle>
+										<Style TargetType="FlyoutPresenter">
+											<Setter Property="Background" Value="Black"/>
+											<Setter Property="BorderBrush" Value="Gray"/>
+											<Setter Property="BorderThickness" Value="2"/>
+											<Setter Property="Padding" Value="2"/>
+										</Style>
+									</Flyout.FlyoutPresenterStyle>
+
+									<Grid Width="440">
+										<Grid.RowDefinitions>
+											<RowDefinition Height="Auto"/>
+											<RowDefinition Height="*"/>
+										</Grid.RowDefinitions>
+
+										<!-- Station title and badge -->
+										<StackPanel Grid.Row="0"
+													Orientation="Horizontal"
+													Background="White">
+											<TextBlock Margin="8,4"
+													   VerticalAlignment="Center"
+													   Foreground="Black" FontSize="28"
+													   Text="{Binding StationGroupDescription}"/>
+											<ListView ItemsSource="{Binding StationBadges, Mode=OneWay}"
+													  SelectionMode="None">
+												<ListView.ItemsPanel>
+													<ItemsPanelTemplate>
+														<VirtualizingStackPanel Orientation="Horizontal"/>
+													</ItemsPanelTemplate>
+												</ListView.ItemsPanel>
+												<ListView.ItemTemplate>
+													<DataTemplate>
+														<controls:StationBadge
+															Diameter="60"
+															StationCode="{Binding StationCode}"
+															RailwayId="{Binding RailwayId}"/>
+													</DataTemplate>
+												</ListView.ItemTemplate>
+												<ListView.ItemContainerStyle>
+													<Style TargetType="ListViewItem">
+														<Setter Property="Margin" Value="2"/>
+														<Setter Property="Template">
+															<Setter.Value>
+																<ControlTemplate TargetType="ContentControl">
+																	<Grid>
+																		<ContentPresenter/>
+																	</Grid>
+																</ControlTemplate>
+															</Setter.Value>
+														</Setter>
+													</Style>
+												</ListView.ItemContainerStyle>
+											</ListView>
+										</StackPanel>
+
+										<!-- Trains information -->
+										<ListView Grid.Row="1"
+												  Width="460"
+												  Margin="0,2,0,0"
+												  SelectionMode="None"
+												  ItemsSource="{Binding Trains, Mode=OneWay}"
+												  ItemTemplate="{StaticResource TrainItemTemplate}"/>
+									</Grid>
+								</Flyout>
+							</FlyoutBase.AttachedFlyout>
+						</controls:StationGroupMember>
+
+						<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+								   IsHitTestVisible="False"
+								   FontSize="4"
+								   Text="{Binding StationGroupDescription}"/>
+
+						<i:Interaction.Behaviors>
+							<behaviors:FrameworkElementCenterBehavior/>
+						</i:Interaction.Behaviors>
+					</Grid>
+				</DataTemplate>
+
+				<DataTemplate x:Key="ConnectorTemplate">
+					<Grid>
+						<controls:ConnectorMember
+							X1="{Binding LocationA.X}"
+							Y1="{Binding LocationA.Y}"
+							X2="{Binding LocationB.X}"
+							Y2="{Binding LocationB.Y}"
+							LineWidth="2"
+							UpperState="{Binding StateFromA}"
+							LowerState="{Binding StateFromB}"
+							ToolTipService.ToolTip="{Binding RailwayDescription}"
+							IsLoaded="{Binding IsLoaded, Mode=TwoWay}"
+							Tapped="CanvasItem_Tapped">
+
+							<FlyoutBase.AttachedFlyout>
+								<Flyout Placement="Bottom">
+									<Flyout.FlyoutPresenterStyle>
+										<Style TargetType="FlyoutPresenter">
+											<Setter Property="Background" Value="Black"/>
+											<Setter Property="BorderBrush" Value="Gray"/>
+											<Setter Property="BorderThickness" Value="2"/>
+											<Setter Property="Padding" Value="2"/>
+										</Style>
+									</Flyout.FlyoutPresenterStyle>
+
+									<Grid Width="440">
+										<Grid.RowDefinitions>
+											<RowDefinition Height="Auto"/>
+											<RowDefinition Height="*"/>
+										</Grid.RowDefinitions>
+
+										<!-- Railway title and badge -->
+										<StackPanel Grid.Row="0"
+													Orientation="Horizontal"
+													Background="White">
+											<TextBlock
+												Margin="8,4"
+												VerticalAlignment="Center"
+												Foreground="Black" FontSize="28"
+												Text="{Binding RailwayDescription}"/>
+											<controls:RailwayBadge
+												Diameter="40"
+												RailwayId="{Binding RailwayId}"/>
+										</StackPanel>
+
+										<!-- Trains information -->
+										<ListView Grid.Row="1"
+												  Width="460"
+												  Margin="0,2,0,0"
+												  SelectionMode="None"
+												  ItemsSource="{Binding Trains, Mode=OneWay}"
+												  ItemTemplate="{StaticResource TrainItemTemplate}"/>
+									</Grid>
+								</Flyout>
+							</FlyoutBase.AttachedFlyout>
+						</controls:ConnectorMember>
+					</Grid>
+				</DataTemplate>
+
+				<controls:RailwayMemberTemplateSelector
+					x:Key="RailwayDataTemplateSelectorKey"
+					StationGroupTemplate="{StaticResource StationGroupTemplate}"
+					ConnectorTemplate="{StaticResource ConnectorTemplate}"/>
+			</Grid.Resources>
+
+			<ScrollViewer
+				x:Name="MainViewer"
+				Margin="0"
+				Background="{StaticResource App.ViewerBrush}"
+				Opacity="0"
+				ZoomMode="Enabled"
+				MaxZoomFactor="9"
+				MinZoomFactor="1"
+				HorizontalScrollMode="Enabled"
+				VerticalScrollMode="Enabled"
+				HorizontalScrollBarVisibility="Auto"
+				VerticalScrollBarVisibility="Auto"
+				ManipulationMode="TranslateX,TranslateY,Scale">
+
+				<controls:CanvasListView
+					x:Name="MainCanvas"
+					Width="{Binding ActualWidth, ElementName=MainViewer, Mode=OneWay}"
+					Height="{Binding ActualHeight, ElementName=MainViewer, Mode=OneWay}"
+					CanDragItems="False"
+					ItemsSource="{Binding Path=Core}"
+					ItemTemplateSelector="{StaticResource RailwayDataTemplateSelectorKey}">
+					<ListView.ItemsPanel>
+						<ItemsPanelTemplate>
+							<Canvas/>
+						</ItemsPanelTemplate>
+					</ListView.ItemsPanel>
+
+					<ListView.ItemContainerStyle>
+						<Style TargetType="ListViewItem">
+							<Setter Property="Margin" Value="0"/>
+							<Setter Property="Template">
+								<Setter.Value>
+									<ControlTemplate TargetType="ContentControl">
+										<Grid>
+											<ContentPresenter/>
+										</Grid>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</ListView.ItemContainerStyle>
+				</controls:CanvasListView>
+
+				<i:Interaction.Behaviors>
+					<behaviors:ScrollViewerSelectorBehavior
+						ViewerZoomFactor="{Binding MainViewerZoomFactor, Mode=TwoWay}"
+						InSelectorCenterPosition="{Binding MainCanvasCenterPosition, Mode=TwoWay}"
+						IsViewerInitiating="{Binding IsMainViewerInitiating, Mode=OneWay}"
+						ZoomDirection="{Binding ZoomDirection, Mode=OneWay}"/>
+				</i:Interaction.Behaviors>
+			</ScrollViewer>
+		</Grid>
+	</Grid>
+</Page>

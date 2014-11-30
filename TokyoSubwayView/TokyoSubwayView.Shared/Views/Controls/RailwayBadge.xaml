@@ -1,0 +1,33 @@
+﻿<UserControl
+    x:Class="TokyoSubwayView.Views.Controls.RailwayBadge"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignWidth="40"
+    d:DesignHeight="40"
+    x:Name="ControlRoot"
+    Width="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Diameter}"
+    FontFamily="/Assets/Futura Metro.ttf#Futura Metro"
+    Foreground="Black">
+
+    <Grid RenderTransformOrigin="0.5,0.5">
+        <Ellipse x:Name="Circle"
+                 Width="40"
+                 Height="{Binding RelativeSource={RelativeSource Self}, Path=Width}"
+                 Stroke="Red"
+                 StrokeThickness="9"
+                 Fill="White"/>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock x:Name="LineCode"
+                       HorizontalAlignment="Center"
+                       FontSize="17"
+                       Text="M"/>
+        </StackPanel>
+
+        <Grid.RenderTransform>
+            <ScaleTransform x:Name="DiameterTransform"/>
+        </Grid.RenderTransform>
+    </Grid>
+</UserControl>

@@ -1,0 +1,98 @@
+﻿<SettingsFlyout
+	x:Class="TokyoSubwayView.Views.OptionsFlyout"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:i="using:Microsoft.Xaml.Interactivity"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:viewModels="using:TokyoSubwayView.ViewModels"
+	xmlns:behaviors="using:TokyoSubwayView.Views.Behaviors"
+	mc:Ignorable="d"
+	HeaderBackground="{StaticResource App.AppBarBrush}"
+	IconSource="/Assets/SmallLogo.png"
+	Title="Options"
+	d:DesignWidth="350"
+	x:Name="FlyoutRoot">
+	<SettingsFlyout.DataContext>
+		<viewModels:OptionsFlyoutViewModel/>
+	</SettingsFlyout.DataContext>
+
+	<SettingsFlyout.Resources>
+		<Style x:Key="SectionHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+			<Setter Property="FontSize" Value="20"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="LineHeight" Value="20"/>
+		</Style>
+	</SettingsFlyout.Resources>
+
+	<StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+		<!-- Line Selection Priority -->
+		<StackPanel>
+			<TextBlock x:Name="LineSelectionPriority"
+					   Style="{StaticResource SectionHeaderStyle}"
+					   Text="Line Selection and Priority"/>
+			<ListView Width="266"
+					  Margin="8"
+					  Background="LightGray"
+					  ItemsSource="{Binding SourceItems}"
+					  SelectionMode="Multiple">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<Grid Margin="2">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="30"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+
+							<TextBlock Grid.Column="0"
+									   Margin="8,2"
+									   Foreground="White"
+									   FontSize="20" FontWeight="Bold"
+									   Text="{Binding Order}"
+									   Visibility="{Binding IsSelected, Converter={StaticResource BooleanToVisibilityConverterKey}}"/>
+							<TextBlock Grid.Column="1"
+									   Margin="8,2"
+									   VerticalAlignment="Center"
+									   Foreground="White"
+									   FontSize="18"
+									   Text="{Binding Description}"/>
+						</Grid>
+					</DataTemplate>
+				</ListView.ItemTemplate>
+
+				<i:Interaction.Behaviors>
+					<behaviors:ListViewSelectBehavior SelectedIndices="{Binding SelectedIndices, Mode=TwoWay}"/>
+				</i:Interaction.Behaviors>
+			</ListView>
+
+			<StackPanel HorizontalAlignment="Left"
+						Margin="6,4,0,0"
+						Orientation="Horizontal">
+				<Button x:Name="ClearButton"
+						Width="120"
+						Content="Clear"
+						FontSize ="18"
+						Command="{Binding ClearCommand}"/>
+				<Button x:Name="ApplyButton"
+						Width="120"
+						Margin="14,0,0,0"
+						FontSize="18"
+						Content="Apply"
+						Command="{Binding ApplyCommand}"/>
+			</StackPanel>
+		</StackPanel>
+
+		<!-- Language -->
+		<StackPanel Margin="0,24,0,0">
+			<TextBlock x:Name="LanguageSelection"
+					   Style="{StaticResource SectionHeaderStyle}"
+					   Text="Language"/>
+			<ComboBox HorizontalAlignment="Left"
+					  Margin="8,12,0,0"
+					  Width="250"
+					  FontSize="18"
+					  ItemsSource="{Binding LanguageNames, Mode=OneTime}"
+					  SelectedIndex="{Binding LanguageIndex, Mode=TwoWay}"/>
+		</StackPanel>
+	</StackPanel>
+</SettingsFlyout>

@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>a46a2282-5150-45fb-9184-dd18de89594e</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>TokyoSubwayView</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="$(MSBuildThisFileDirectory)App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Common\NotificationObject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\ConnectionFailureException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\ConnectionTimeoutException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Exceptions\ConnectionUnavailableException.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LanguageBag.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\LanguageSubtag.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Metro\MetroManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Metro\MetroHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Metro\MetroAccessor.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Metro\Railway.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Metro\Station.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Metro\Train.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Metro\TrainInformation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Metro\TrainState.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Operation.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Models\Settings.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Supplement.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\BadgeViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ConnectorViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\MainPageViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\OptionsFlyoutViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RailwayItemViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\RailwayMemberViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StationGroupViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\StationViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\TrainViewModel.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)ViewModels\ViewModelBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\FrameworkElementCenterBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\ListViewSelectBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Behaviors\ScrollViewerSelectorBehavior.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\CanvasListView.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\ConnectorMember.xaml.cs">
+      <DependentUpon>ConnectorMember.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\MovingLine.xaml.cs">
+      <DependentUpon>MovingLine.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\RailwayBadge.xaml.cs">
+      <DependentUpon>RailwayBadge.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\RailwayMemberTemplateSelector.cs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\StationBadge.xaml.cs">
+      <DependentUpon>StationBadge.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\StationGroupMember.xaml.cs">
+      <DependentUpon>StationGroupMember.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\ColorToSolidColorBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\DateTimeOffsetToStringConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\DoubleInvertSignConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\EnumToStringConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\RailwayIdToBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\TimeSpanToBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\TimeSpanToStringConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\TrainStateToBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\ZoomDirectionModeToBooleanConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\ZoomDirectionMode.cs" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\Futura Metro.ttf" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\LightGray.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\MediumGray.png" />
+    <Content Include="$(MSBuildThisFileDirectory)Assets\DarkGray.png" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\NavigationHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\RelayCommand.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\SuspensionManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Common\ObservableDictionary.cs" />
+    <Content Include="$(MSBuildThisFileDirectory)Models\Metro\StationExtra.json" />
+    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\en-US\Resources.resw" />
+    <PRIResource Include="$(MSBuildThisFileDirectory)Strings\ja-JP\Resources.resw" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="$(MSBuildThisFileDirectory)Models\Metro\TrainType.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Controls\ConnectorMember.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Controls\MovingLine.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Controls\RailwayBadge.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Controls\StationBadge.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Controls\StationGroupMember.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="$(MSBuildThisFileDirectory)Views\Themes\Theme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+</Project>

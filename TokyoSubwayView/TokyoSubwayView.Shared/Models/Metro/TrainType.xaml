@@ -1,0 +1,22 @@
+﻿<ResourceDictionary
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<x:String x:Key="Unknown">不明</x:String>
+	<x:String x:Key="Local">各停</x:String>
+	<x:String x:Key="Express">急行</x:String>
+	<x:String x:Key="Rapid">快速</x:String>
+	<x:String x:Key="SemiExpress">準急</x:String>
+	<x:String x:Key="TamaExpress">多摩急行</x:String>
+	<x:String x:Key="HolidayExpress">土休急行</x:String>
+	<x:String x:Key="CommuterSemiExpress">通勤準急</x:String>
+	<x:String x:Key="Extra">臨時</x:String>
+	<x:String x:Key="RomanceCar">特急ロマンスカー</x:String>
+	<x:String x:Key="RapidExpress">快速急行</x:String>
+	<x:String x:Key="CommuterExpress">通勤急行</x:String>
+	<x:String x:Key="LimitedExpress">特急</x:String>
+	<x:String x:Key="CommuterLimitedExpress">通勤特急</x:String>
+	<x:String x:Key="CommuterRapid">通勤快速</x:String>
+	<x:String x:Key="ToyoRapid">東葉快速</x:String>
+
+</ResourceDictionary>

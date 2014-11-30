@@ -1,0 +1,60 @@
+﻿<UserControl
+	x:Class="TokyoSubwayView.Views.Controls.StationGroupMember"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	d:DesignWidth="100"
+	d:DesignHeight="100"
+	x:Name="ControlRoot">
+
+	<Ellipse x:Name="EllipseRoot"
+			 Width="{Binding Diameter, ElementName=ControlRoot}"
+			 Height="{Binding Diameter, ElementName=ControlRoot}"
+			 Fill="LightGray"
+			 Opacity="0.6">
+
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup x:Name="CommonStates">
+				<VisualState x:Name="Vacant">
+					<Storyboard>
+						<ColorAnimation
+							Storyboard.TargetName="EllipseRoot"
+							Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
+							Duration="0:0:0.1"
+							To="{StaticResource Metro.RailwayMember.VacantAColor}"/>
+					</Storyboard>
+				</VisualState>
+
+				<VisualState x:Name="OnTime">
+					<Storyboard>
+						<ColorAnimation
+							Storyboard.TargetName="EllipseRoot"
+							Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
+							Duration="0:0:0.1"
+							To="{StaticResource Metro.Train.OnTimeColor}"/>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="DelayShort">
+					<Storyboard>
+						<ColorAnimation
+							Storyboard.TargetName="EllipseRoot"
+							Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
+							Duration="0:0:0.1"
+							To="{StaticResource Metro.Train.DelayShortColor}"/>
+					</Storyboard>
+				</VisualState>
+				<VisualState x:Name="DelayLong">
+					<Storyboard>
+						<ColorAnimation
+							Storyboard.TargetName="EllipseRoot"
+							Storyboard.TargetProperty="(Ellipse.Fill).(SolidColorBrush.Color)"
+							Duration="0:0:0.1"
+							To="{StaticResource Metro.Train.DelayLongColor}"/>
+					</Storyboard>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
+	</Ellipse>
+</UserControl>

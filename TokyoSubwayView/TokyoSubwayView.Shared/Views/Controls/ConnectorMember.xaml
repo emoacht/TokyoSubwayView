@@ -1,0 +1,46 @@
+﻿<UserControl
+	x:Class="TokyoSubwayView.Views.Controls.ConnectorMember"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:controls="using:TokyoSubwayView.Views.Controls"
+	mc:Ignorable="d"
+	d:DesignWidth="400"
+	d:DesignHeight="80"
+	x:Name="ControlRoot">
+
+	<Grid RenderTransformOrigin="0,0.5">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<FrameworkElement.RenderTransform>
+			<CompositeTransform TranslateY="{Binding ElementName=ControlRoot, Path=LineWidth, Converter={StaticResource DoubleInvertSignConverterKey}}"
+								Rotation="{Binding ElementName=ControlRoot, Path=LineAngle}"/>
+		</FrameworkElement.RenderTransform>
+
+		<Grid Grid.Row="0"
+			  Background="{StaticResource Metro.RailwayMember.VacantABrush}">
+			<controls:MovingLine
+				x:Name="UpperLine"
+				LineLength="{Binding ElementName=ControlRoot, Path=LineLength}"
+				LineWidth="{Binding ElementName=ControlRoot, Path=LineWidth}"
+				State="{Binding ElementName=ControlRoot, Path=UpperState}"/>
+		</Grid>
+		<Grid Grid.Row="1"
+			  Background="{StaticResource Metro.RailwayMember.VacantBBrush}">
+			<controls:MovingLine
+				x:Name="LowerLine"
+				LineLength="{Binding ElementName=ControlRoot, Path=LineLength}"
+				LineWidth="{Binding ElementName=ControlRoot, Path=LineWidth}"
+				State="{Binding ElementName=ControlRoot, Path=LowerState}"
+				RenderTransformOrigin="0.5,0.5">
+				<FrameworkElement.RenderTransform>
+					<ScaleTransform ScaleX="-1"/>
+				</FrameworkElement.RenderTransform>
+			</controls:MovingLine>
+		</Grid>
+	</Grid>
+</UserControl>
