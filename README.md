@@ -9,7 +9,7 @@ TokyoSubwayView is a Windows Store app to show train situations in Tokyo Metro S
 
 ##Development
 
-This app utilizes Tokyo Metro Open Data API. Each developer have to acquire an unique access token key and embed it in the code.
+This app utilizes Tokyo Metro Open Data API. Each developer has to acquire an unique access token key and embed it in the code.
 
 ##History
 
