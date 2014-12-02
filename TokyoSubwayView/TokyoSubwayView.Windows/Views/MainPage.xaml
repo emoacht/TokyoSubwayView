@@ -106,14 +106,15 @@
 					<Grid Background="{Binding RailwayId, Converter={StaticResource RailwayIdToBrushConverterKey}}">
 						<Grid.Resources>
 							<Style x:Key="TrainItemTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
-								<Setter Property="Margin" Value="2"/>
+								<Setter Property="Margin" Value="2,0,0,0"/>
 								<Setter Property="Foreground" Value="White"/>
 								<Setter Property="FontSize" Value="18"/>
+								<Setter Property="LineHeight" Value="18"/>
 								<Setter Property="TextWrapping" Value="Wrap"/>
 							</Style>
 						</Grid.Resources>
 
-						<Grid Margin="4">
+						<Grid Margin="4,4,4,8">
 							<Grid.ColumnDefinitions>
 								<ColumnDefinition Width="120"/>
 								<ColumnDefinition Width="100"/>
