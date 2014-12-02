@@ -26,11 +26,12 @@
 	<SolidColorBrush x:Key="Metro.Train.DelayLongBrush" Color="{StaticResource Metro.Train.DelayLongColor}"/>
 	<SolidColorBrush x:Key="Metro.Train.PhantomBrush" Color="{StaticResource Metro.Train.PhantomColor}"/>
 
-	<SolidColorBrush x:Key="Metro.TrainState.Vacant" Color="Transparent"/>
+	<SolidColorBrush x:Key="Metro.TrainState.VacantBrush" Color="Transparent"/>
 	<SolidColorBrush x:Key="Metro.TrainState.OnTimeBrush" Color="Transparent"/>
 	<SolidColorBrush x:Key="Metro.TrainState.DelayShortBrush" Color="{StaticResource Metro.Train.DelayShortColor}"/>
 	<SolidColorBrush x:Key="Metro.TrainState.DelayLongBrush" Color="{StaticResource Metro.Train.DelayLongColor}"/>
 	<SolidColorBrush x:Key="Metro.TrainState.PhantomBrush" Color="{StaticResource Metro.Train.PhantomColor}"/>
+	<SolidColorBrush x:Key="Metro.TrainState.DashBrush" Color="Black" Opacity="0.18"/>
 
 	<Color x:Key="Metro.Railway.MarunouchiColor">#FFed1c24</Color>
 	<Color x:Key="Metro.Railway.GinzaColor">#FFf7931d</Color>

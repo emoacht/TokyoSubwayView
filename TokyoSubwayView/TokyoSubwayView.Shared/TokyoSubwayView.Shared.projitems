@@ -72,6 +72,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\TimeSpanToBrushConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\TimeSpanToStringConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\TrainStateToBrushConverter.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\TransparentBrushToVisibilityConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Converters\ZoomDirectionModeToBooleanConverter.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\ZoomDirectionMode.cs" />
     <Content Include="$(MSBuildThisFileDirectory)Assets\Futura Metro.ttf" />

@@ -1,25 +1,26 @@
 ﻿<Application
-    x:Class="TokyoSubwayView.App"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="using:TokyoSubwayView.Views.Converters">
+	x:Class="TokyoSubwayView.App"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:converters="using:TokyoSubwayView.Views.Converters">
 
-    <Application.Resources>
-        <ResourceDictionary>
-            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
-            <converters:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverterKey"/>
-            <converters:DateTimeOffsetToStringConverter x:Key="DateTimeOffsetToStringConverterKey"/>
-            <converters:DoubleInvertSignConverter x:Key="DoubleInvertSignConverterKey"/>
-            <converters:EnumToStringConverter x:Key="EnumToStringConverterKey"/>
-            <converters:RailwayIdToBrushConverter x:Key="RailwayIdToBrushConverterKey"/>
-            <converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey"/>
-            <converters:TimeSpanToBrushConverter x:Key="TimeSpanToBrushConverterKey"/>
-            <converters:TrainStateToBrushConverter x:Key="TrainStateToBrushConverterKey"/>
-            <converters:ZoomDirectionModeToBooleanConverter x:Key="ZoomDirectionModeToBooleanConverterKey"/>
+	<Application.Resources>
+		<ResourceDictionary>
+			<converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverterKey"/>
+			<converters:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverterKey"/>
+			<converters:DateTimeOffsetToStringConverter x:Key="DateTimeOffsetToStringConverterKey"/>
+			<converters:DoubleInvertSignConverter x:Key="DoubleInvertSignConverterKey"/>
+			<converters:EnumToStringConverter x:Key="EnumToStringConverterKey"/>
+			<converters:RailwayIdToBrushConverter x:Key="RailwayIdToBrushConverterKey"/>
+			<converters:TimeSpanToStringConverter x:Key="TimeSpanToStringConverterKey"/>
+			<converters:TimeSpanToBrushConverter x:Key="TimeSpanToBrushConverterKey"/>
+			<converters:TrainStateToBrushConverter x:Key="TrainStateToBrushConverterKey"/>
+			<converters:TransparentBrushToVisibilityConverter x:Key="TransparentBrushToVisibilityConverterKey"/>
+			<converters:ZoomDirectionModeToBooleanConverter x:Key="ZoomDirectionModeToBooleanConverterKey"/>
 
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Views/Themes/Theme.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Application.Resources>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Views/Themes/Theme.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
 </Application>

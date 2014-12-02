@@ -104,41 +104,46 @@
 			<Grid.Resources>
 				<DataTemplate x:Key="TrainItemTemplate">
 					<Grid Background="{Binding RailwayId, Converter={StaticResource RailwayIdToBrushConverterKey}}">
-						<Border BorderBrush="{Binding State, Converter={StaticResource TrainStateToBrushConverterKey}}"
-							   BorderThickness="4">
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="120"/>
-									<ColumnDefinition Width="100"/>
-									<ColumnDefinition Width="120"/>
-									<ColumnDefinition Width="80"/>
-								</Grid.ColumnDefinitions>
+						<Grid.Resources>
+							<Style x:Key="TrainItemTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+								<Setter Property="Margin" Value="2"/>
+								<Setter Property="Foreground" Value="White"/>
+								<Setter Property="FontSize" Value="18"/>
+								<Setter Property="TextWrapping" Value="Wrap"/>
+							</Style>
+						</Grid.Resources>
 
-								<TextBlock Grid.Column="0"
-										   Margin="2"
-										   Foreground="White"
-										   FontSize="18" TextWrapping="Wrap"
-										   Text="{Binding RailwayDescription}"/>
-								<TextBlock Grid.Column="1"
-										   Margin="2"
-										   Foreground="White"
-										   FontSize="18" TextWrapping="Wrap"
-										   Text="{Binding TrainTypeDescription}"/>
-								<TextBlock Grid.Column="2"
-										   Margin="2"
-										   Foreground="White"
-										   FontSize="18" TextWrapping="Wrap">
+						<Grid Margin="4">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="120"/>
+								<ColumnDefinition Width="100"/>
+								<ColumnDefinition Width="120"/>
+								<ColumnDefinition Width="80"/>
+							</Grid.ColumnDefinitions>
+
+							<TextBlock Grid.Column="0"
+									   Style="{StaticResource TrainItemTextStyle}"
+									   Text="{Binding RailwayDescription}"/>
+							<TextBlock Grid.Column="1"
+									   Style="{StaticResource TrainItemTextStyle}"
+									   Text="{Binding TrainTypeDescription}"/>
+							<TextBlock Grid.Column="2"
+									   Style="{StaticResource TrainItemTextStyle}">
 									<Run Text="{Binding RailDirectionDescription}"/>
 									<LineBreak/>
 									<Run Text="{Binding TerminalStationDescription}"/>
-								</TextBlock>
-								<TextBlock Grid.Column="3"
-										   Margin="2"
-										   Foreground="White"
-										   FontSize="18" TextWrapping="Wrap"
-										   Text="{Binding Note}"/>
-							</Grid>
-						</Border>
+							</TextBlock>
+							<TextBlock Grid.Column="3"
+									   Style="{StaticResource TrainItemTextStyle}"
+									   Text="{Binding Note}"/>
+						</Grid>
+						<Rectangle x:Name="TrainItemFrame"
+								   Stroke="{Binding State, Converter={StaticResource TrainStateToBrushConverterKey}}"
+								   StrokeThickness="4"
+								   Visibility="{Binding Stroke, RelativeSource={RelativeSource Self}, Converter={StaticResource TransparentBrushToVisibilityConverterKey}}"/>
+						<Rectangle Stroke="{StaticResource Metro.TrainState.DashBrush}"
+								   StrokeThickness="4" StrokeDashArray="2"
+								   Visibility="{Binding Stroke, ElementName=TrainItemFrame, Converter={StaticResource TransparentBrushToVisibilityConverterKey}}"/>
 					</Grid>
 				</DataTemplate>
 
