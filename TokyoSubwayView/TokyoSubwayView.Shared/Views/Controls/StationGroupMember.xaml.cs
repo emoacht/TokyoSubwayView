@@ -16,88 +16,69 @@ using Windows.UI.Xaml.Navigation;
 
 namespace TokyoSubwayView.Views.Controls
 {
-    public sealed partial class StationGroupMember : UserControl
-    {
-        public StationGroupMember()
-        {
-            this.InitializeComponent();
-
-            this.Loaded += (_, __) => IsLoaded = true;
-        }
+	public sealed partial class StationGroupMember : RailwayMember
+	{
+		public StationGroupMember()
+		{
+			this.InitializeComponent();
+		}
 
 
-        #region Load
+		#region Geometry
 
-        public bool IsLoaded
-        {
-            get { return (bool)GetValue(IsLoadedProperty); }
-            set { SetValue(IsLoadedProperty, value); }
-        }
-        public static readonly DependencyProperty IsLoadedProperty =
-            DependencyProperty.Register(
-                "IsLoaded",
-                typeof(bool),
-                typeof(StationGroupMember),
-                new PropertyMetadata(false));
+		public double Diameter
+		{
+			get { return (double)GetValue(DiameterProperty); }
+			set { SetValue(DiameterProperty, value); }
+		}
+		public static readonly DependencyProperty DiameterProperty =
+			DependencyProperty.Register(
+				"Diameter",
+				typeof(double),
+				typeof(StationGroupMember),
+				new PropertyMetadata(0D));
 
-        #endregion
-
-
-        #region Geometry
-
-        public double Diameter
-        {
-            get { return (double)GetValue(DiameterProperty); }
-            set { SetValue(DiameterProperty, value); }
-        }
-        public static readonly DependencyProperty DiameterProperty =
-            DependencyProperty.Register(
-                "Diameter",
-                typeof(double),
-                typeof(StationGroupMember),
-                new PropertyMetadata(0D));
-
-        #endregion
+		#endregion
 
 
-        #region State
+		#region State
 
-        public TrainState State
-        {
-            get { return (TrainState)GetValue(StateProperty); }
-            set { SetValue(StateProperty, value); }
-        }
-        public static readonly DependencyProperty StateProperty =
-            DependencyProperty.Register(
-                "State",
-                typeof(TrainState),
-                typeof(StationGroupMember),
-                new PropertyMetadata(
-                    default(TrainState),
-                    (d, e) => ((StationGroupMember)d).OnStateChanged()));
+		public TrainState State
+		{
+			get { return (TrainState)GetValue(StateProperty); }
+			set { SetValue(StateProperty, value); }
+		}
+		public static readonly DependencyProperty StateProperty =
+			DependencyProperty.Register(
+				"State",
+				typeof(TrainState),
+				typeof(StationGroupMember),
+				new PropertyMetadata(
+					default(TrainState),
+					(d, e) => ((StationGroupMember)d).OnStateChanged()));
 
-        private void OnStateChanged()
-        {
-            switch (State)
-            {
-                case TrainState.Vacant:
-                    VisualStateManager.GoToState(this, "Vacant", true);
-                    break;
+		private void OnStateChanged()
+		{
+			switch (State)
+			{
+				case TrainState.Vacant:
+					VisualStateManager.GoToState(this, "Vacant", true);
+					break;
 
-                case TrainState.OnTime:
-                    VisualStateManager.GoToState(this, "OnTime", true);
-                    break;
+				case TrainState.OnTime:
+					VisualStateManager.GoToState(this, "OnTime", true);
+					break;
 
-                case TrainState.DelayShort:
-                    VisualStateManager.GoToState(this, "DelayShort", true);
-                    break;
+				case TrainState.DelayShort:
+					VisualStateManager.GoToState(this, "DelayShort", true);
+					break;
 
-                case TrainState.DelayLong:
-                    VisualStateManager.GoToState(this, "DelayLong", true);
-                    break;
-            }
-        }
+				case TrainState.DelayLong:
+					VisualStateManager.GoToState(this, "DelayLong", true);
+					break;
+			}
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

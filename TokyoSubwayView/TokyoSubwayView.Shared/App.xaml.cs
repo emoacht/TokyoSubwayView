@@ -44,7 +44,10 @@ namespace TokyoSubwayView
 			Debug.WriteLine("Unhandled exception happened. {0}", e.Exception);
 			e.Handled = true;
 
-			// "System.ArgumentException:The parameter is incorrect." can be safely ignored.
+			// The following exception can be safely ignored.
+			// Message: The parameter is incorrect.
+			// Exception type: System.ArgumentException
+			// Exception message: "The parameter is incorrect." or "Value does not fall within the expected range."
 			// This exception seems to be thrown from a ScrollViewer sometimes when it is manipulated by touch.
 			if (e.Exception.HResult == -2147024809)
 				return;

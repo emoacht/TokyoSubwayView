@@ -55,6 +55,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\RailwayBadge.xaml.cs">
       <DependentUpon>RailwayBadge.xaml</DependentUpon>
     </Compile>
+    <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\RailwayMember.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\RailwayMemberTemplateSelector.cs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Views\Controls\StationBadge.xaml.cs">
       <DependentUpon>StationBadge.xaml</DependentUpon>

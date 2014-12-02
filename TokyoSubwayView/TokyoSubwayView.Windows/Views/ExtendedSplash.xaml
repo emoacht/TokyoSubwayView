@@ -11,7 +11,7 @@
             <Image x:Name="SplashImage"
                    Source="/Assets/SplashScreen.png"/>
             <ProgressRing x:Name="SplashProgressRing"
-                          Width="60" Height="60" HorizontalAlignment="Center"
+                          Width="50" Height="50" HorizontalAlignment="Center"
                           Foreground="White"
                           IsActive="True"/>
         </Canvas>

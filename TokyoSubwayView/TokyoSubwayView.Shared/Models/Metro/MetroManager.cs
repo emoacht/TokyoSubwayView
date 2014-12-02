@@ -431,8 +431,7 @@ namespace TokyoSubwayView.Models.Metro
 				throw;
 			}
 
-			foreach (var item in outcome)
-				Debug.WriteLine("{0}-{1}", item.Key, item.Value);
+			//Debug.WriteLine(String.Join(Environment.NewLine, outcome.Select(x => String.Format("{0}-{1}", x.Key, x.Value))));
 
 			return outcome;
 		}
@@ -454,8 +453,7 @@ namespace TokyoSubwayView.Models.Metro
 					throw;
 			}
 
-			foreach (var item in outcome)
-				Debug.WriteLine("{0}={1}", item.Key, item.Value);
+			//Debug.WriteLine(String.Join(Environment.NewLine, outcome.Select(x => String.Format("{0}-{1}", x.Key, x.Value))));
 
 			return outcome;
 		}
