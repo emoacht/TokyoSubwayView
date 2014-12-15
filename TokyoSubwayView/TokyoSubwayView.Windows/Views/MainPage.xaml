@@ -30,7 +30,8 @@
 
 	<Page.TopAppBar>
 		<AppBar Background="{StaticResource App.AppBarBrush}"
-				BorderBrush="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background}">
+				BorderBrush="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Background}"
+				IsOpen="True">
 			<Grid>
 				<StackPanel HorizontalAlignment="Left" VerticalAlignment="Center"
 							Orientation="Horizontal">
@@ -347,6 +348,7 @@
 
 				<i:Interaction.Behaviors>
 					<behaviors:ScrollViewerSelectorBehavior
+						ViewerSize="{Binding MainViewerSize, Mode=TwoWay}"
 						ViewerZoomFactor="{Binding MainViewerZoomFactor, Mode=TwoWay}"
 						InSelectorCenterPosition="{Binding MainCanvasCenterPosition, Mode=TwoWay}"
 						IsViewerInitiating="{Binding IsMainViewerInitiating, Mode=OneWay}"

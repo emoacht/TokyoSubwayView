@@ -16,9 +16,7 @@ namespace TokyoSubwayView.Models
 	public class Operation : NotificationObject
 	{
 		private readonly ObservableCollection<RailwayMemberViewModel> core;
-
-		private FrameworkElement mainViewer;
-
+		
 		public Operation(ObservableCollection<RailwayMemberViewModel> core)
 		{
 			this.core = core;
@@ -134,16 +132,11 @@ namespace TokyoSubwayView.Models
 
 		#region Initiate
 
-		internal async Task InitiateBaseAsync(FrameworkElement mainViewer = null)
+		internal async Task InitiateBaseAsync(Size viewerSize = default(Size))
 		{
-			if (this.mainViewer == null)
-			{
-				if (mainViewer == null)
-					return;
+			if (!CanConvert && (viewerSize == default(Size)))
+				return;
 
-				this.mainViewer = mainViewer;
-			}
-			
 			var railways = await MetroManager.Current.GetRailwaysAsync();
 			var stations = await MetroManager.Current.GetStationsAsync();
 
@@ -151,7 +144,7 @@ namespace TokyoSubwayView.Models
 				return;
 
 			// Check real railways area.
-			CheckAreaCoordinates(stations, mainViewer);
+			CheckAreaCoordinates(stations, viewerSize);
 
 			// Clear existing railway members.
 			core.Clear();
@@ -246,14 +239,22 @@ namespace TokyoSubwayView.Models
 
 		#region Conversion
 
-		private Rect railwaysArea;
+		private bool CanConvert
+		{
+			get { return (railwaysArea != Rect.Empty); }
+		}
+
+		private Rect railwaysArea = Rect.Empty;
 		private const double railwaysAreaPadding = 0.008; // To add vacant space around real railways area
 		private double inCanvasZoomFactor;
 		private double inCanvasPaddingLeft;
 		private double inCanvasPaddingTop;
 
-		internal void CheckAreaCoordinates(IEnumerable<Station> stations, FrameworkElement viewer)
+		private void CheckAreaCoordinates(IEnumerable<Station> stations, Size viewerSize)
 		{
+			if (viewerSize == default(Size))
+				return;
+
 			double left = 180D; // Starting value is the greatest in longitude (East longitude, International Date Line).
 			double right = 0D;
 			double top = 0D;
@@ -275,9 +276,9 @@ namespace TokyoSubwayView.Models
 				right - left + railwaysAreaPadding * 2,
 				top - bottom + railwaysAreaPadding * 2); // Height is latitude and so top is greater than bottom.
 
-			inCanvasZoomFactor = Math.Min(viewer.ActualWidth / railwaysArea.Width, viewer.ActualHeight / railwaysArea.Height);
-			inCanvasPaddingLeft = (viewer.ActualWidth - railwaysArea.Width * inCanvasZoomFactor) / 2;
-			inCanvasPaddingTop = (viewer.ActualHeight - railwaysArea.Height * inCanvasZoomFactor) / 2;
+			inCanvasZoomFactor = Math.Min(viewerSize.Width / railwaysArea.Width, viewerSize.Height / railwaysArea.Height);
+			inCanvasPaddingLeft = (viewerSize.Width - railwaysArea.Width * inCanvasZoomFactor) / 2;
+			inCanvasPaddingTop = (viewerSize.Height - railwaysArea.Height * inCanvasZoomFactor) / 2;
 		}
 
 		internal Point ConvertPositionFromReal(Point realPosition)
@@ -337,7 +338,7 @@ namespace TokyoSubwayView.Models
 
 		internal async Task UpdateBaseAsync(LanguageSubtag languageTag)
 		{
-			if (this.mainViewer == null)
+			if (!CanConvert)
 				return;
 
 			var trains = await MetroManager.Current.GetTrainsAsync(standardLength);

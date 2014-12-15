@@ -34,24 +34,21 @@ namespace TokyoSubwayView.ViewModels
 
 		private static readonly TimeSpan checkIntervalLength = TimeSpan.FromMilliseconds(50);
 
-		internal async Task InitiateAsync(FrameworkElement mainViewer)
+		internal async Task InitiateAsync()
 		{
 			try
 			{
 				IsMainViewerInitiating = true;
 
-				await Op.InitiateBaseAsync(mainViewer);
+				await Op.InitiateBaseAsync(MainViewerSize);
 
 				RaisePropertyChanged(() => MainViewerZoomFactor);
 				RaisePropertyChanged(() => MainCanvasCenterPosition);
 
 				// Wait for all railway members being loaded. Otherwise, subsequent restoring position 
 				// may not work correctly.
-				while (true)
+				while (Core.Any(x => !x.IsLoaded))
 				{
-					if (Core.All(x => x.IsLoaded))
-						break;
-
 					await Task.Delay(checkIntervalLength);
 				}
 			}
@@ -68,7 +65,7 @@ namespace TokyoSubwayView.ViewModels
 
 		internal async Task UpdatePriorityAsync()
 		{
-			await InitiateAsync(null);
+			await InitiateAsync();
 			await Op.UpdateBaseAsync(Settings.Current.LanguageTag);
 		}
 
@@ -97,6 +94,8 @@ namespace TokyoSubwayView.ViewModels
 
 
 		#region Viewer
+
+		public Size MainViewerSize { get; set; }
 
 		public float MainViewerZoomFactor
 		{

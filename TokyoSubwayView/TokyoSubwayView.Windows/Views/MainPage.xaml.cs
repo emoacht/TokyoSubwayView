@@ -78,11 +78,8 @@ namespace TokyoSubwayView.Views
 		private async void OnLoaded(object sender, RoutedEventArgs e)
 		{
 			Debug.WriteLine("OnLoaded MainViewer Size => {0}-{1}", MainViewer.ActualWidth, MainViewer.ActualHeight);
-
-			if (TopAppBar != null)
-				TopAppBar.IsOpen = true;
-
-			await mainPageViewModel.InitiateAsync(MainViewer);
+			
+			await mainPageViewModel.InitiateAsync();
 
 			MainViewer.Opacity = 1;
 
@@ -117,8 +114,14 @@ namespace TokyoSubwayView.Views
 				e.Handled = true;
 
 				var item = sender as FrameworkElement;
-				if (item != null)
-					FlyoutBase.ShowAttachedFlyout(item);
+				if (item == null)
+					return;
+
+				var flyoutBase = FlyoutBase.GetAttachedFlyout(item);
+				if (flyoutBase == null)
+					return;
+
+				flyoutBase.ShowAt(item);
 			}
 			catch (Exception ex)
 			{

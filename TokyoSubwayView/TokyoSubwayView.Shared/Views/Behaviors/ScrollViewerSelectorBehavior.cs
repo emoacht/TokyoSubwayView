@@ -7,17 +7,12 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using TokyoSubwayView.Models;
-using TokyoSubwayView.Models.Metro;
-using TokyoSubwayView.ViewModels;
 using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using WinRTXamlToolkit.Controls.Extensions;
 
 namespace TokyoSubwayView.Views.Behaviors
@@ -66,19 +61,7 @@ namespace TokyoSubwayView.Views.Behaviors
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
 		{
-			Debug.WriteLine("MainViewer loaded.");
-
-			// SizeChanged event
-			disposer.Add(
-				Observable.FromEvent<SizeChangedEventHandler, SizeChangedEventArgs>(
-					h => (sender_, e_) => h(e_),
-					h => AssociatedViewer.SizeChanged += h,
-					h => AssociatedViewer.SizeChanged -= h)
-				.Subscribe(e_ =>
-				{
-					if (0D < e_.PreviousSize.Width)
-						RestoreInViewerCenterPosition();
-				}));
+			ViewerSize = new Size(AssociatedViewer.ActualWidth, AssociatedViewer.ActualHeight);
 
 			// ViewChanged event
 			disposer.Add(
@@ -88,6 +71,14 @@ namespace TokyoSubwayView.Views.Behaviors
 				.Throttle(TimeSpan.FromMilliseconds(100)) // 100 msec throttling
 				.ObserveOn(SynchronizationContext.Current)
 				.Subscribe(e_ => SaveInViewerCenterPosition()));
+
+			// SizeChanged event
+			disposer.Add(
+				Observable.FromEvent<SizeChangedEventHandler, SizeChangedEventArgs>(
+					h => (sender_, e_) => h(e_),
+					h => AssociatedViewer.SizeChanged += h,
+					h => AssociatedViewer.SizeChanged -= h)
+				.Subscribe(e_ => RestoreInViewerCenterPosition()));
 
 			// Tapped event
 			StartListenTap();
@@ -101,6 +92,18 @@ namespace TokyoSubwayView.Views.Behaviors
 
 
 		#region Common
+
+		public Size ViewerSize
+		{
+			get { return (Size)GetValue(ViewerSizeProperty); }
+			set { SetValue(ViewerSizeProperty, value); }
+		}
+		public static readonly DependencyProperty ViewerSizeProperty =
+			DependencyProperty.Register(
+				"ViewerSize",
+				typeof(Size),
+				typeof(ScrollViewerSelectorBehavior),
+				new PropertyMetadata(default(Size)));
 
 		public float ViewerZoomFactor
 		{
@@ -148,14 +151,14 @@ namespace TokyoSubwayView.Views.Behaviors
 
 		private void RestoreInViewerCenterPosition()
 		{
-			if (!isInitial || (ViewerZoomFactor == 0F) || (InSelectorCenterPosition == default(Point)))
+			if ((ViewerZoomFactor == 0F) || (InSelectorCenterPosition == default(Point)))
 				return;
-
-			isInitial = false;
 
 			var inViewerCenterPosition = new Point(AssociatedViewer.ActualWidth / 2D, AssociatedViewer.ActualHeight / 2D);
 
-			RestoreInViewerPosition(inViewerCenterPosition, InSelectorCenterPosition, ViewerZoomFactor, true);
+			RestoreInViewerPosition(inViewerCenterPosition, InSelectorCenterPosition, ViewerZoomFactor, isInitial);
+
+			isInitial = false;
 
 			Debug.WriteLine("Restored center position and zoom factor. {0}", InSelectorCenterPosition);
 		}

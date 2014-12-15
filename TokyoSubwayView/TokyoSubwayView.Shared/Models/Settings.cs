@@ -188,7 +188,7 @@ namespace TokyoSubwayView.Models
 			}
 			catch (Exception ex)
 			{
-				Debug.WriteLine("Failed to try and get property value. {0}", ex);
+				Debug.WriteLine("Failed to try to get property value. {0}", ex);
 				propertyValue = default(T);
 				return false;
 			}

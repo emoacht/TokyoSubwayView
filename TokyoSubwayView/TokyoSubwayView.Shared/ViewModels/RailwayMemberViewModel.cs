@@ -44,15 +44,6 @@ namespace TokyoSubwayView.ViewModels
 		}
 		private int _zIndex = 0;
 
-		public bool IsLoaded
-		{
-			get { return _isLoaded; }
-			set
-			{
-				_isLoaded = value;
-				RaisePropertyChanged();
-			}
-		}
-		private bool _isLoaded;
+		public bool IsLoaded { get; set; }
 	}
 }
