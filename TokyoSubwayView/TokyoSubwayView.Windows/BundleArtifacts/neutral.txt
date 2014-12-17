@@ -1,3 +1,2 @@
-MainPackage=C:\Users\EM\Documents\Visual Studio 2013\Projects\TokyoSubwayView\TokyoSubwayView\TokyoSubwayView.Windows\bin\Release\TokyoSubwayView.Windows_1.2.0.2_Bundle\TokyoSubwayView.Windows_1.2.0.2_AnyCPU.appx
-SymbolPackage=C:\Users\EM\Documents\Visual Studio 2013\Projects\TokyoSubwayView\TokyoSubwayView\TokyoSubwayView.Windows\AppPackages\TokyoSubwayView.Windows_1.2.0.2_Test\TokyoSubwayView.Windows_1.2.0.2_AnyCPU.appxsym
-ResourcePack=C:\Users\EM\Documents\Visual Studio 2013\Projects\TokyoSubwayView\TokyoSubwayView\TokyoSubwayView.Windows\bin\Release\TokyoSubwayView.Windows_1.2.0.2_Bundle\TokyoSubwayView.Windows_1.2.0.2_language-ja.appx
+MainPackage=C:\Users\EM\Documents\Visual Studio 2013\Projects\TokyoSubwayView\TokyoSubwayView\TokyoSubwayView.Windows\bin\Release\TokyoSubwayView.Windows_1.2.0.3_Bundle\TokyoSubwayView.Windows_1.2.0.3_AnyCPU.appx
+SymbolPackage=C:\Users\EM\Documents\Visual Studio 2013\Projects\TokyoSubwayView\TokyoSubwayView\TokyoSubwayView.Windows\AppPackages\TokyoSubwayView.Windows_1.2.0.3_Test\TokyoSubwayView.Windows_1.2.0.3_AnyCPU.appxsym

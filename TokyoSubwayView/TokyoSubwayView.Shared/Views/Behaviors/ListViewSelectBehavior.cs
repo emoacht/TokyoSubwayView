@@ -52,8 +52,8 @@ namespace TokyoSubwayView.Views.Behaviors
 				typeof(ListViewSelectBehavior),
 				new PropertyMetadata(
 					null,
-					(d, e) => ((ListViewSelectBehavior)d).OnSelectedIndicesChanged()));
-
+					(d, e) => ((ListViewSelectBehavior)d).OnSelectedIndicesChanged(e)));
+		
 
 		private bool isChanging;
 
@@ -78,7 +78,7 @@ namespace TokyoSubwayView.Views.Behaviors
 			}
 		}
 
-		private void OnSelectedIndicesChanged()
+		private void OnSelectedIndicesChanged(DependencyPropertyChangedEventArgs e)
 		{
 			if (isChanging)
 				return;

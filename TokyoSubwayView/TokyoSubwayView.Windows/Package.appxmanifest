@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="10186emoacht.TokyoSubwayView" Publisher="CN=5F9BAA2D-0994-4087-8DE9-3ED74FD92B0C" Version="1.2.0.2" />
+  <Identity Name="10186emoacht.TokyoSubwayView" Publisher="CN=5F9BAA2D-0994-4087-8DE9-3ED74FD92B0C" Version="1.2.0.3" />
   <Properties>
     <DisplayName>TokyoSubwayView</DisplayName>
     <PublisherDisplayName>emoacht</PublisherDisplayName>
