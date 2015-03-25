@@ -8,22 +8,22 @@ using Windows.UI.Xaml.Media;
 
 namespace TokyoSubwayView.Views.Converters
 {
-    public class ColorToSolidColorBrushConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if (!(value is Color))
-                return DependencyProperty.UnsetValue;
+	public class ColorToSolidColorBrushConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, string language)
+		{
+			if (!(value is Color))
+				return DependencyProperty.UnsetValue;
 
-            return new SolidColorBrush((Color)value);
-        }
+			return new SolidColorBrush((Color)value);
+		}
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            if (!(value is SolidColorBrush))
-                return DependencyProperty.UnsetValue;
+		public object ConvertBack(object value, Type targetType, object parameter, string language)
+		{
+			if (!(value is SolidColorBrush))
+				return DependencyProperty.UnsetValue;
 
-            return ((SolidColorBrush)value).Color;
-        }
-    }
+			return ((SolidColorBrush)value).Color;
+		}
+	}
 }

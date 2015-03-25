@@ -1,9 +1,9 @@
-﻿using Microsoft.Xaml.Interactivity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Microsoft.Xaml.Interactivity;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -53,18 +53,18 @@ namespace TokyoSubwayView.Views.Behaviors
 				new PropertyMetadata(
 					null,
 					(d, e) => ((ListViewSelectBehavior)d).OnSelectedIndicesChanged(e)));
-		
 
-		private bool isChanging;
+
+		private bool _isChanging;
 
 		private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (isChanging)
+			if (_isChanging)
 				return;
 
 			try
 			{
-				isChanging = true;
+				_isChanging = true;
 
 				var items = AssociatedListView.Items;
 
@@ -74,18 +74,18 @@ namespace TokyoSubwayView.Views.Behaviors
 			}
 			finally
 			{
-				isChanging = false;
+				_isChanging = false;
 			}
 		}
 
 		private void OnSelectedIndicesChanged(DependencyPropertyChangedEventArgs e)
 		{
-			if (isChanging)
+			if (_isChanging)
 				return;
 
 			try
 			{
-				isChanging = true;
+				_isChanging = true;
 
 				if (SelectedIndices == null)
 				{
@@ -109,7 +109,7 @@ namespace TokyoSubwayView.Views.Behaviors
 			}
 			finally
 			{
-				isChanging = false;
+				_isChanging = false;
 			}
 		}
 	}

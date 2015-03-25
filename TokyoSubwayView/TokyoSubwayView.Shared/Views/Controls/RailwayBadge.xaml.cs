@@ -16,60 +16,60 @@ using Windows.UI.Xaml.Navigation;
 
 namespace TokyoSubwayView.Views.Controls
 {
-    public sealed partial class RailwayBadge : UserControl
-    {
-        public RailwayBadge()
-        {
-            this.InitializeComponent();
-        }
+	public sealed partial class RailwayBadge : UserControl
+	{
+		public RailwayBadge()
+		{
+			this.InitializeComponent();
+		}
 
 
-        public double Diameter
-        {
-            get { return (double)GetValue(DiameterProperty); }
-            set { SetValue(DiameterProperty, value); }
-        }
-        public static readonly DependencyProperty DiameterProperty =
-            DependencyProperty.Register(
-                "Diameter",
-                typeof(double),
-                typeof(RailwayBadge),
-                new PropertyMetadata(
-                    40D, // Default
-                    (d, e) =>
-                    {
-                        var badge = (RailwayBadge)d;
-                        var factor = (double)e.NewValue / 40D;
+		public double Diameter
+		{
+			get { return (double)GetValue(DiameterProperty); }
+			set { SetValue(DiameterProperty, value); }
+		}
+		public static readonly DependencyProperty DiameterProperty =
+			DependencyProperty.Register(
+				"Diameter",
+				typeof(double),
+				typeof(RailwayBadge),
+				new PropertyMetadata(
+					40D, // Default
+					(d, e) =>
+					{
+						var badge = (RailwayBadge)d;
+						var factor = (double)e.NewValue / 40D;
 
-                        if (factor != 1D)
-                        {
-                            badge.DiameterTransform.ScaleX = factor;
-                            badge.DiameterTransform.ScaleY = factor;
-                        }
-                    }));
+						if (factor != 1D)
+						{
+							badge.DiameterTransform.ScaleX = factor;
+							badge.DiameterTransform.ScaleY = factor;
+						}
+					}));
 
-        public string RailwayId
-        {
-            get { return (string)GetValue(RailwayIdProperty); }
-            set { SetValue(RailwayIdProperty, value); }
-        }
-        public static readonly DependencyProperty RailwayIdProperty =
-            DependencyProperty.Register(
-                "RailwayId",
-                typeof(string),
-                typeof(RailwayBadge),
-                new PropertyMetadata(
-                    String.Empty,
-                    (d, e) =>
-                    {
-                        var badge = (RailwayBadge)d;
-                        var railwayId = (string)e.NewValue;
+		public string RailwayId
+		{
+			get { return (string)GetValue(RailwayIdProperty); }
+			set { SetValue(RailwayIdProperty, value); }
+		}
+		public static readonly DependencyProperty RailwayIdProperty =
+			DependencyProperty.Register(
+				"RailwayId",
+				typeof(string),
+				typeof(RailwayBadge),
+				new PropertyMetadata(
+					String.Empty,
+					(d, e) =>
+					{
+						var badge = (RailwayBadge)d;
+						var railwayId = (string)e.NewValue;
 
-                        if ((MetroManager.Current.RailwayIds != null) && MetroManager.Current.RailwayIds.Contains(railwayId))
-                        {
-                            badge.Circle.Stroke = MetroManager.Current.RailwayIdBrushMap[railwayId];
-                            badge.LineCode.Text = MetroManager.Current.RailwayIdCodeMap[railwayId];
-                        }
-                    }));
-    }
+						if ((MetroManager.Current.RailwayIds != null) && MetroManager.Current.RailwayIds.Contains(railwayId))
+						{
+							badge.Circle.Stroke = MetroManager.Current.RailwayIdBrushMap[railwayId];
+							badge.LineCode.Text = MetroManager.Current.RailwayIdCodeMap[railwayId];
+						}
+					}));
+	}
 }

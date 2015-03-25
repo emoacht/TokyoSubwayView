@@ -141,6 +141,7 @@ namespace TokyoSubwayView.Models
 			Roaming,
 		}
 
+
 		#region One by One
 
 		private static T GetValue<T>(DataContainer container = default(DataContainer), [CallerMemberName] string propertyName = null)
@@ -219,9 +220,10 @@ namespace TokyoSubwayView.Models
 
 		#endregion
 
+
 		#region In Bulk
 
-		private const string settingsKey = "settings";
+		private const string _settingsKey = "settings";
 
 		public static async Task LoadLocalAsync()
 		{
@@ -236,13 +238,13 @@ namespace TokyoSubwayView.Models
 					? ApplicationData.Current.LocalSettings
 					: ApplicationData.Current.RoamingSettings;
 
-				if (!settings.Values.ContainsKey(settingsKey))
+				if (!settings.Values.ContainsKey(_settingsKey))
 					return;
 
 				using (var ms = new MemoryStream())
 				using (var sw = new StreamWriter(ms))
 				{
-					await sw.WriteAsync(settings.Values[settingsKey].ToString());
+					await sw.WriteAsync(settings.Values[_settingsKey].ToString());
 
 					ms.Seek(0, SeekOrigin.Begin);
 
@@ -280,13 +282,13 @@ namespace TokyoSubwayView.Models
 
 					var buff = await sr.ReadToEndAsync();
 
-					if (settings.Values.ContainsKey(settingsKey))
+					if (settings.Values.ContainsKey(_settingsKey))
 					{
-						settings.Values[settingsKey] = buff;
+						settings.Values[_settingsKey] = buff;
 					}
 					else
 					{
-						settings.Values.Add(settingsKey, buff);
+						settings.Values.Add(_settingsKey, buff);
 					}
 				}
 			}

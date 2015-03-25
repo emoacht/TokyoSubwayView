@@ -28,21 +28,21 @@ namespace TokyoSubwayView.Views
 	{
 		public NavigationHelper NavigationHelper
 		{
-			get { return this.navigationHelper; }
+			get { return _navigationHelper; }
 		}
-		private NavigationHelper navigationHelper;
+		private NavigationHelper _navigationHelper;
 
-		private readonly MainPageViewModel mainPageViewModel;
+		private readonly MainPageViewModel _mainPageViewModel;
 
 		public MainPage()
 		{
 			this.InitializeComponent();
 
-			mainPageViewModel = (MainPageViewModel)this.DataContext;
+			_mainPageViewModel = (MainPageViewModel)this.DataContext;
 
-			this.navigationHelper = new NavigationHelper(this);
-			this.navigationHelper.LoadState += navigationHelper_LoadState;
-			this.navigationHelper.SaveState += navigationHelper_SaveState;
+			this._navigationHelper = new NavigationHelper(this);
+			this._navigationHelper.LoadState += navigationHelper_LoadState;
+			this._navigationHelper.SaveState += navigationHelper_SaveState;
 
 			this.Loaded += OnLoaded;
 			this.SizeChanged += OnSizeChanged;
@@ -78,12 +78,12 @@ namespace TokyoSubwayView.Views
 		private async void OnLoaded(object sender, RoutedEventArgs e)
 		{
 			Debug.WriteLine("OnLoaded MainViewer Size => {0}-{1}", MainViewer.ActualWidth, MainViewer.ActualHeight);
-			
-			await mainPageViewModel.InitiateAsync();
+
+			await _mainPageViewModel.InitiateAsync();
 
 			MainViewer.Opacity = 1;
 
-			mainPageViewModel.StartTimer();
+			_mainPageViewModel.StartTimer();
 		}
 
 		private void OnSizeChanged(object sender, SizeChangedEventArgs e)
@@ -93,7 +93,7 @@ namespace TokyoSubwayView.Views
 
 			var isPageLandscape = e.NewSize.Width > e.NewSize.Height; // This page's orientation may not match display orientation.
 
-			mainPageViewModel.HasEnoughWidth = isPageLandscape;
+			_mainPageViewModel.HasEnoughWidth = isPageLandscape;
 		}
 
 
@@ -147,7 +147,7 @@ namespace TokyoSubwayView.Views
 				typeof(MainPage),
 				new PropertyMetadata(
 					null,
-					async (d, e) => await ((MainPage)d).mainPageViewModel.UpdatePriorityAsync()));
+					async (d, e) => await ((MainPage)d)._mainPageViewModel.UpdatePriorityAsync()));
 
 		#endregion
 
@@ -166,7 +166,7 @@ namespace TokyoSubwayView.Views
 				typeof(MainPage),
 				new PropertyMetadata(
 					default(LanguageSubtag),
-					async (d, e) => await ((MainPage)d).mainPageViewModel.UpdateLanguageAsync()));
+					async (d, e) => await ((MainPage)d)._mainPageViewModel.UpdateLanguageAsync()));
 
 		#endregion
 
@@ -220,12 +220,12 @@ namespace TokyoSubwayView.Views
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			navigationHelper.OnNavigatedTo(e);
+			_navigationHelper.OnNavigatedTo(e);
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
 		{
-			navigationHelper.OnNavigatedFrom(e);
+			_navigationHelper.OnNavigatedFrom(e);
 		}
 
 		#endregion

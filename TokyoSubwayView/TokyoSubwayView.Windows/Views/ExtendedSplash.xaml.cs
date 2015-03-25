@@ -23,8 +23,8 @@ namespace TokyoSubwayView.Views
 {
 	public sealed partial class ExtendedSplash : Page
 	{
-		private readonly Frame rootFrame; // To hold root Frame
-		private readonly SplashScreen systemSplashScreen; // To hold the system splash screen
+		private readonly Frame _rootFrame; // To hold root Frame
+		private readonly SplashScreen _systemSplashScreen; // To hold the system splash screen
 
 		private bool isActivated;
 
@@ -40,14 +40,14 @@ namespace TokyoSubwayView.Views
 			// Listen for window resize events to reposition the extended splash image accordingly.
 			Window.Current.SizeChanged += OnSizeChanged;
 
-			this.rootFrame = rootFrame;
-			this.systemSplashScreen = systemSplashscreen;
+			this._rootFrame = rootFrame;
+			this._systemSplashScreen = systemSplashscreen;
 
 			PositionImageProgressRing();
 
 			RestoreStateAsync(loadState);
 		}
-		
+
 		private async void OnImageOpened(object sender, RoutedEventArgs e)
 		{
 			// ImageOpened means the file has been read, but the image hasn't been painted yet.
@@ -67,10 +67,10 @@ namespace TokyoSubwayView.Views
 
 		private void PositionImageProgressRing()
 		{
-			if (systemSplashScreen == null)
+			if (_systemSplashScreen == null)
 				return;
 
-			var splashImageRect = systemSplashScreen.ImageLocation;
+			var splashImageRect = _systemSplashScreen.ImageLocation;
 
 			PositionImage(splashImageRect);
 			PositionRing(splashImageRect);
@@ -125,12 +125,12 @@ namespace TokyoSubwayView.Views
 			Window.Current.SizeChanged -= OnSizeChanged;
 
 			// Navigate to MainPage.
-			if (!rootFrame.Navigate(typeof(MainPage)))
+			if (!_rootFrame.Navigate(typeof(MainPage)))
 			{
 				Debug.WriteLine("Failed to navigate to MainPage.");
 			}
 
-			Window.Current.Content = rootFrame;
+			Window.Current.Content = _rootFrame;
 		}
 	}
 }

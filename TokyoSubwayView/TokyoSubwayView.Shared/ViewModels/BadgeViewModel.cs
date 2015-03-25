@@ -5,13 +5,13 @@ using System.Text;
 
 namespace TokyoSubwayView.ViewModels
 {
-    [DataContract]
-    public class BadgeViewModel : ViewModelBase
-    {
-        [DataMember]
-        public string StationCode { get; set; }
+	[DataContract]
+	public class BadgeViewModel : ViewModelBase
+	{
+		[DataMember]
+		public string StationCode { get; set; }
 
-        [DataMember]
-        public string RailwayId { get; set; }
-    }
+		[DataMember]
+		public string RailwayId { get; set; }
+	}
 }

@@ -16,84 +16,84 @@ using Windows.UI.Xaml.Navigation;
 
 namespace TokyoSubwayView.Views.Controls
 {
-    public sealed partial class MovingLine : UserControl
-    {
-        public MovingLine()
-        {
-            this.InitializeComponent();
-        }
+	public sealed partial class MovingLine : UserControl
+	{
+		public MovingLine()
+		{
+			this.InitializeComponent();
+		}
 
 
-        public double LineLength
-        {
-            get { return (double)GetValue(LineLengthProperty); }
-            set { SetValue(LineLengthProperty, value); }
-        }
-        public static readonly DependencyProperty LineLengthProperty =
-            DependencyProperty.Register(
-                "LineLength",
-                typeof(double),
-                typeof(MovingLine),
-                new PropertyMetadata(400D));
+		public double LineLength
+		{
+			get { return (double)GetValue(LineLengthProperty); }
+			set { SetValue(LineLengthProperty, value); }
+		}
+		public static readonly DependencyProperty LineLengthProperty =
+			DependencyProperty.Register(
+				"LineLength",
+				typeof(double),
+				typeof(MovingLine),
+				new PropertyMetadata(400D));
 
-        public double LineWidth
-        {
-            get { return (double)GetValue(LineWidthProperty); }
-            set { SetValue(LineWidthProperty, value); }
-        }
-        public static readonly DependencyProperty LineWidthProperty =
-            DependencyProperty.Register(
-                "LineWidth",
-                typeof(double),
-                typeof(MovingLine),
-                new PropertyMetadata(
-                    40D,
-                    (d, e) =>
-                    {
-                        var line = ((MovingLine)d);
+		public double LineWidth
+		{
+			get { return (double)GetValue(LineWidthProperty); }
+			set { SetValue(LineWidthProperty, value); }
+		}
+		public static readonly DependencyProperty LineWidthProperty =
+			DependencyProperty.Register(
+				"LineWidth",
+				typeof(double),
+				typeof(MovingLine),
+				new PropertyMetadata(
+					40D,
+					(d, e) =>
+					{
+						var line = ((MovingLine)d);
 
-                        line.LineRoot.Y1 = (double)e.NewValue / 2D;
-                        line.LineRoot.StrokeThickness = (double)e.NewValue;
-                    }));
+						line.LineRoot.Y1 = (double)e.NewValue / 2D;
+						line.LineRoot.StrokeThickness = (double)e.NewValue;
+					}));
 
-        public TrainState State
-        {
-            get { return (TrainState)GetValue(StateProperty); }
-            set { SetValue(StateProperty, value); }
-        }
-        public static readonly DependencyProperty StateProperty =
-            DependencyProperty.Register(
-                "State",
-                typeof(TrainState),
-                typeof(MovingLine),
-                new PropertyMetadata(TrainState.Vacant, OnStateChanged));
+		public TrainState State
+		{
+			get { return (TrainState)GetValue(StateProperty); }
+			set { SetValue(StateProperty, value); }
+		}
+		public static readonly DependencyProperty StateProperty =
+			DependencyProperty.Register(
+				"State",
+				typeof(TrainState),
+				typeof(MovingLine),
+				new PropertyMetadata(TrainState.Vacant, OnStateChanged));
 
-        private static void OnStateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var line = (MovingLine)d;
+		private static void OnStateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		{
+			var line = (MovingLine)d;
 
-            switch ((TrainState)e.NewValue)
-            {
-                case TrainState.Vacant:
-                    VisualStateManager.GoToState(line, "Vacant", true);
-                    break;
+			switch ((TrainState)e.NewValue)
+			{
+				case TrainState.Vacant:
+					VisualStateManager.GoToState(line, "Vacant", true);
+					break;
 
-                case TrainState.OnTime:
-                    VisualStateManager.GoToState(line, "OnTime", true);
-                    break;
+				case TrainState.OnTime:
+					VisualStateManager.GoToState(line, "OnTime", true);
+					break;
 
-                case TrainState.DelayShort:
-                    VisualStateManager.GoToState(line, "DelayShort", true);
-                    break;
+				case TrainState.DelayShort:
+					VisualStateManager.GoToState(line, "DelayShort", true);
+					break;
 
-                case TrainState.DelayLong:
-                    VisualStateManager.GoToState(line, "DelayLong", true);
-                    break;
+				case TrainState.DelayLong:
+					VisualStateManager.GoToState(line, "DelayLong", true);
+					break;
 
-                case TrainState.Phantom:
-                    VisualStateManager.GoToState(line, "Phantom", true);
-                    break;
-            }
-        }
-    }
+				case TrainState.Phantom:
+					VisualStateManager.GoToState(line, "Phantom", true);
+					break;
+			}
+		}
+	}
 }

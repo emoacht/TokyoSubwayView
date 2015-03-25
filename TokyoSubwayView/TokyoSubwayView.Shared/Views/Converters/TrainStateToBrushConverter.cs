@@ -8,23 +8,23 @@ using Windows.UI.Xaml.Data;
 
 namespace TokyoSubwayView.Views.Converters
 {
-    public class TrainStateToBrushConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, string language)
-        {
-            if (MetroManager.Current.TrainStateBrushMap == null)
-                return DependencyProperty.UnsetValue;
+	public class TrainStateToBrushConverter : IValueConverter
+	{
+		public object Convert(object value, Type targetType, object parameter, string language)
+		{
+			if (MetroManager.Current.TrainStateBrushMap == null)
+				return DependencyProperty.UnsetValue;
 
-            TrainState buff;
-            if (!Enum.TryParse(value.ToString(), out buff))
-                return DependencyProperty.UnsetValue;
+			TrainState buff;
+			if (!Enum.TryParse(value.ToString(), out buff))
+				return DependencyProperty.UnsetValue;
 
-            return MetroManager.Current.TrainStateBrushMap[buff];
-        }
+			return MetroManager.Current.TrainStateBrushMap[buff];
+		}
 
-        public object ConvertBack(object value, Type targetType, object parameter, string language)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public object ConvertBack(object value, Type targetType, object parameter, string language)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }

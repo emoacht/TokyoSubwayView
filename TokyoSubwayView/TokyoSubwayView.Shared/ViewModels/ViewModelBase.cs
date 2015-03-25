@@ -5,9 +5,9 @@ using TokyoSubwayView.Common;
 
 namespace TokyoSubwayView.ViewModels
 {
-    public abstract class ViewModelBase : NotificationObject
-    {
-        protected ViewModelBase()
-        { }
-    }
+	public abstract class ViewModelBase : NotificationObject
+	{
+		protected ViewModelBase()
+		{ }
+	}
 }

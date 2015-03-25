@@ -32,7 +32,7 @@ namespace TokyoSubwayView.ViewModels
 
 		#region Operation
 
-		private static readonly TimeSpan checkIntervalLength = TimeSpan.FromMilliseconds(50);
+		private static readonly TimeSpan _checkIntervalLength = TimeSpan.FromMilliseconds(50);
 
 		internal async Task InitiateAsync()
 		{
@@ -49,7 +49,7 @@ namespace TokyoSubwayView.ViewModels
 				// may not work correctly.
 				while (Core.Any(x => !x.IsLoaded))
 				{
-					await Task.Delay(checkIntervalLength);
+					await Task.Delay(_checkIntervalLength);
 				}
 			}
 			finally

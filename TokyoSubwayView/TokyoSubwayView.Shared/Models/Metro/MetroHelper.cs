@@ -129,7 +129,7 @@ namespace TokyoSubwayView.Models.Metro
 
 		#region Rail Direction
 
-		private static readonly Regex bracketsPattern = new Regex("〈.+〉"); // For station name with brackets
+		private static readonly Regex _bracketsPattern = new Regex("〈.+〉"); // For station name with brackets
 
 		public static string GetRailDirectionNameJa(string railDirection)
 		{
@@ -142,7 +142,7 @@ namespace TokyoSubwayView.Models.Metro
 			if (station.Equals(default(KeyValuePair<string, string>)))
 				return buff;
 
-			return bracketsPattern.Replace(station.Value, String.Empty);
+			return _bracketsPattern.Replace(station.Value, String.Empty);
 		}
 
 		public static string GetRailDirectionNameEn(string railDirection)

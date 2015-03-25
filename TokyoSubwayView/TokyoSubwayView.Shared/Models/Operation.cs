@@ -15,11 +15,11 @@ namespace TokyoSubwayView.Models
 {
 	public class Operation : NotificationObject
 	{
-		private readonly ObservableCollection<RailwayMemberViewModel> core;
-		
+		private readonly ObservableCollection<RailwayMemberViewModel> _core;
+
 		public Operation(ObservableCollection<RailwayMemberViewModel> core)
 		{
-			this.core = core;
+			this._core = core;
 		}
 
 
@@ -63,31 +63,31 @@ namespace TokyoSubwayView.Models
 
 		#region Timer
 
-		private readonly DispatcherTimer updateTimer = new DispatcherTimer();
-		private readonly DispatcherTimer elapsedTimer = new DispatcherTimer();
+		private readonly DispatcherTimer _updateTimer = new DispatcherTimer();
+		private readonly DispatcherTimer _elapsedTimer = new DispatcherTimer();
 
-		private static readonly TimeSpan waitLength = TimeSpan.FromSeconds(10); // Waiting time length when data have not been updated
-		private static readonly TimeSpan standardLength = TimeSpan.FromSeconds(60); // Standard interval length of update
+		private static readonly TimeSpan _waitLength = TimeSpan.FromSeconds(10); // Waiting time length when data have not been updated
+		private static readonly TimeSpan _standardLength = TimeSpan.FromSeconds(60); // Standard interval length of update
 
 		internal void StartTimerBase()
 		{
 			if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
 				return;
 
-			updateTimer.Tick += UpdateTimerTick;
-			updateTimer.Start();
+			_updateTimer.Tick += UpdateTimerTick;
+			_updateTimer.Start();
 
-			elapsedTimer.Interval = TimeSpan.FromSeconds(1);
-			elapsedTimer.Tick += (_, __) => ElapsedTime = DateTimeOffset.Now - CreatedTime;
+			_elapsedTimer.Interval = TimeSpan.FromSeconds(1);
+			_elapsedTimer.Tick += (_, __) => ElapsedTime = DateTimeOffset.Now - CreatedTime;
 
 			Debug.WriteLine("Update Timer started!");
 		}
 
 		private async void UpdateTimerTick(object sender, object e)
 		{
-			updateTimer.Stop();
+			_updateTimer.Stop();
 
-			if (!core.Any())
+			if (!_core.Any())
 				await InitiateBaseAsync();
 
 			var trains = await MetroManager.Current.GetTrainsAsync(TimeSpan.Zero);
@@ -98,33 +98,33 @@ namespace TokyoSubwayView.Models
 				{
 					CreatedTime = trains[0].Date;
 
-					if (!elapsedTimer.IsEnabled)
-						elapsedTimer.Start();
+					if (!_elapsedTimer.IsEnabled)
+						_elapsedTimer.Start();
 
 					UpdateBase(trains, Settings.Current.LanguageTag);
 
-					updateTimer.Interval = trains[0].Valid - DateTimeOffset.Now;
+					_updateTimer.Interval = trains[0].Valid - DateTimeOffset.Now;
 
 					Debug.WriteLine("Updated! {0:F0} ({1:HH:mm:ss} => Date {2:HH:mm:ss} Valid {3:HH:mm:ss})",
-						updateTimer.Interval.TotalSeconds,
+						_updateTimer.Interval.TotalSeconds,
 						DateTime.Now, trains[0].Date, trains[0].Valid);
 				}
 				else
 				{
 					// "Valid" time seems not always correct and may be earlier than actual updated time.
-					updateTimer.Interval = waitLength;
+					_updateTimer.Interval = _waitLength;
 
 					Debug.WriteLine("Tardy! {0} ({1:HH:mm:ss} => Date {2:HH:mm:ss} Valid {3:HH:mm:ss})",
-						updateTimer.Interval.Seconds,
+						_updateTimer.Interval.Seconds,
 						DateTime.Now, trains[0].Date, trains[0].Valid);
 				}
 			}
 			else
 			{
-				updateTimer.Interval = standardLength; // As fallback
+				_updateTimer.Interval = _standardLength; // As fallback
 			}
 
-			updateTimer.Start();
+			_updateTimer.Start();
 		}
 
 		#endregion
@@ -147,7 +147,7 @@ namespace TokyoSubwayView.Models
 			CheckAreaCoordinates(stations, viewerSize);
 
 			// Clear existing railway members.
-			core.Clear();
+			_core.Clear();
 
 			// Filter and sort.
 			if ((Settings.Current.RailwayIdPriority != null) && Settings.Current.RailwayIdPriority.Any())
@@ -187,11 +187,11 @@ namespace TokyoSubwayView.Models
 						Location = ConvertPositionFromReal(station.Longitude, station.Latitude),
 					};
 
-					var existingStations = core.OfType<StationGroupViewModel>()
+					var existingStations = _core.OfType<StationGroupViewModel>()
 						.SelectMany(x => x.Members)
 						.ToArray();
 
-					var stationGroup = core.OfType<StationGroupViewModel>()
+					var stationGroup = _core.OfType<StationGroupViewModel>()
 						.FirstOrDefault(x => x.GroupTitleJa == station.Title);
 
 					if (stationGroup != null)
@@ -203,7 +203,7 @@ namespace TokyoSubwayView.Models
 						stationGroup = new StationGroupViewModel();
 						stationGroup.AddMember(stationMember);
 
-						core.Add(stationGroup);
+						_core.Add(stationGroup);
 					}
 
 					if (0 < i)
@@ -225,7 +225,7 @@ namespace TokyoSubwayView.Models
 								LocationB = stationMember.Location,
 							};
 
-							core.Add(connector);
+							_core.Add(connector);
 						}
 					}
 				}
@@ -241,14 +241,14 @@ namespace TokyoSubwayView.Models
 
 		private bool CanConvert
 		{
-			get { return (railwaysArea != Rect.Empty); }
+			get { return (_railwaysArea != Rect.Empty); }
 		}
 
-		private Rect railwaysArea = Rect.Empty;
-		private const double railwaysAreaPadding = 0.008; // To add vacant space around real railways area
-		private double inCanvasZoomFactor;
-		private double inCanvasPaddingLeft;
-		private double inCanvasPaddingTop;
+		private Rect _railwaysArea = Rect.Empty;
+		private const double _railwaysAreaPadding = 0.008; // To add vacant space around real railways area
+		private double _inCanvasZoomFactor;
+		private double _inCanvasPaddingLeft;
+		private double _inCanvasPaddingTop;
 
 		private void CheckAreaCoordinates(IEnumerable<Station> stations, Size viewerSize)
 		{
@@ -270,21 +270,21 @@ namespace TokyoSubwayView.Models
 
 			//Debug.WriteLine("x={0} Y={1} Width={2} Height={3}", left, top, right - left, top - bottom);
 
-			railwaysArea = new Rect(
-				left - railwaysAreaPadding,
-				top + railwaysAreaPadding,
-				right - left + railwaysAreaPadding * 2,
-				top - bottom + railwaysAreaPadding * 2); // Height is latitude and so top is greater than bottom.
+			_railwaysArea = new Rect(
+				left - _railwaysAreaPadding,
+				top + _railwaysAreaPadding,
+				right - left + _railwaysAreaPadding * 2,
+				top - bottom + _railwaysAreaPadding * 2); // Height is latitude and so top is greater than bottom.
 
-			inCanvasZoomFactor = Math.Min(viewerSize.Width / railwaysArea.Width, viewerSize.Height / railwaysArea.Height);
-			inCanvasPaddingLeft = (viewerSize.Width - railwaysArea.Width * inCanvasZoomFactor) / 2;
-			inCanvasPaddingTop = (viewerSize.Height - railwaysArea.Height * inCanvasZoomFactor) / 2;
+			_inCanvasZoomFactor = Math.Min(viewerSize.Width / _railwaysArea.Width, viewerSize.Height / _railwaysArea.Height);
+			_inCanvasPaddingLeft = (viewerSize.Width - _railwaysArea.Width * _inCanvasZoomFactor) / 2;
+			_inCanvasPaddingTop = (viewerSize.Height - _railwaysArea.Height * _inCanvasZoomFactor) / 2;
 		}
 
 		internal Point ConvertPositionFromReal(Point realPosition)
 		{
 			// If argument is invalid or if not checked yet, return invalid value.
-			if ((realPosition == default(Point)) || (inCanvasZoomFactor == 0D))
+			if ((realPosition == default(Point)) || (_inCanvasZoomFactor == 0D))
 				return default(Point);
 
 			return ConvertPositionFromReal(realPosition.X, realPosition.Y);
@@ -293,14 +293,14 @@ namespace TokyoSubwayView.Models
 		private Point ConvertPositionFromReal(double x, double y)
 		{
 			return new Point(
-				(x - railwaysArea.X) * inCanvasZoomFactor + inCanvasPaddingLeft,
-				-(y - railwaysArea.Y) * inCanvasZoomFactor + inCanvasPaddingTop);
+				(x - _railwaysArea.X) * _inCanvasZoomFactor + _inCanvasPaddingLeft,
+				-(y - _railwaysArea.Y) * _inCanvasZoomFactor + _inCanvasPaddingTop);
 		}
 
 		internal Point ConvertPositionToReal(Point inCanvasPosition)
 		{
 			// If argument is invalid or if not checked yet, return invalid value.
-			if ((inCanvasPosition == default(Point)) || (inCanvasZoomFactor == 0D))
+			if ((inCanvasPosition == default(Point)) || (_inCanvasZoomFactor == 0D))
 				return default(Point);
 
 			return ConvertPositionToReal(inCanvasPosition.X, inCanvasPosition.Y);
@@ -309,26 +309,26 @@ namespace TokyoSubwayView.Models
 		private Point ConvertPositionToReal(double x, double y)
 		{
 			return new Point(
-				(x - inCanvasPaddingLeft) / inCanvasZoomFactor + railwaysArea.X,
-				-(y - inCanvasPaddingTop) / inCanvasZoomFactor + railwaysArea.Y);
+				(x - _inCanvasPaddingLeft) / _inCanvasZoomFactor + _railwaysArea.X,
+				-(y - _inCanvasPaddingTop) / _inCanvasZoomFactor + _railwaysArea.Y);
 		}
 
 		internal float ConvertZoomFactorFromReal(double realZoomFactor)
 		{
 			// If argument is invalid or if not checked yet, return invalid value.
-			if ((realZoomFactor == 0D) || (inCanvasZoomFactor == 0D))
+			if ((realZoomFactor == 0D) || (_inCanvasZoomFactor == 0D))
 				return 0F;
 
-			return (float)realZoomFactor / (float)inCanvasZoomFactor;
+			return (float)realZoomFactor / (float)_inCanvasZoomFactor;
 		}
 
 		internal double ConvertZoomFactorToReal(float viewerZoomFactor)
 		{
 			// If argument is invalid or if not checked yet, return invalid value.
-			if ((viewerZoomFactor == 0D) || (inCanvasZoomFactor == 0D))
+			if ((viewerZoomFactor == 0D) || (_inCanvasZoomFactor == 0D))
 				return 0D;
 
-			return viewerZoomFactor * (float)inCanvasZoomFactor;
+			return viewerZoomFactor * (float)_inCanvasZoomFactor;
 		}
 
 		#endregion
@@ -341,7 +341,7 @@ namespace TokyoSubwayView.Models
 			if (!CanConvert)
 				return;
 
-			var trains = await MetroManager.Current.GetTrainsAsync(standardLength);
+			var trains = await MetroManager.Current.GetTrainsAsync(_standardLength);
 			if (trains == null)
 				return;
 
@@ -354,7 +354,7 @@ namespace TokyoSubwayView.Models
 
 			lock (locker)
 			{
-				foreach (var stationGroup in core.OfType<StationGroupViewModel>())
+				foreach (var stationGroup in _core.OfType<StationGroupViewModel>())
 				{
 					if (trains != null)
 					{
@@ -371,7 +371,7 @@ namespace TokyoSubwayView.Models
 					stationGroup.UpdateContent(languageTag);
 				}
 
-				foreach (var connector in core.OfType<ConnectorViewModel>())
+				foreach (var connector in _core.OfType<ConnectorViewModel>())
 				{
 					if (trains != null)
 					{

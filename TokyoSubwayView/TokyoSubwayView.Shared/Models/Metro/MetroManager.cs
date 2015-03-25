@@ -142,7 +142,7 @@ namespace TokyoSubwayView.Models.Metro
 
 		public IReadOnlyDictionary<string, string> TrainTypeMap
 		{
-			get { return _trainTypeMap ?? (_trainTypeMap = GetMapFromXaml(trainTypePath)); }
+			get { return _trainTypeMap ?? (_trainTypeMap = GetMapFromXaml(_trainTypePath)); }
 		}
 		[DataMember]
 		private Dictionary<string, string> _trainTypeMap;
@@ -214,20 +214,20 @@ namespace TokyoSubwayView.Models.Metro
 		private Station[] _stations;
 		private Train[] _trains;
 
-		private DateTimeOffset cachedTime;
-		private bool isCaching = false;
+		private DateTimeOffset _cachedTime;
+		private bool _isCaching = false;
 
-		private int errorCount = 0;
-		private int errorCountMax = 3;
+		private int _errorCount = 0;
+		private int _errorCountMax = 3;
 
-		private const string stationExtraPath = "ms-appx:///Models/Metro/StationExtra.json";
-		private const string trainTypePath = "ms-appx:///Models/Metro/TrainType.xaml";
+		private const string _stationExtraPath = "ms-appx:///Models/Metro/StationExtra.json";
+		private const string _trainTypePath = "ms-appx:///Models/Metro/TrainType.xaml";
 
 		public async Task GetRailwaysStationsTrainsCachedAsync()
 		{
 			try
 			{
-				isCaching = true;
+				_isCaching = true;
 
 				await GetRailwaysAsync();
 				await GetStationsAsync();
@@ -235,7 +235,7 @@ namespace TokyoSubwayView.Models.Metro
 			}
 			finally
 			{
-				isCaching = false;
+				_isCaching = false;
 			}
 		}
 
@@ -264,7 +264,7 @@ namespace TokyoSubwayView.Models.Metro
 			RaisePropertyChanged(() => RailwayIdCodeMap);
 
 			Current._stationIdTitleMap = stations.ToDictionary(x => x.StationId, x => x.Title)
-				.Concat(await GetMapFromJsonAsync(stationExtraPath))
+				.Concat(await GetMapFromJsonAsync(_stationExtraPath))
 				.GroupBy(x => x.Key)
 				.ToDictionary(x => x.Key, x => x.First().Value);
 			RaisePropertyChanged(() => StationIdTitleMap);
@@ -284,7 +284,7 @@ namespace TokyoSubwayView.Models.Metro
 				{
 					_railways = await MetroAccessor.GetRailwaysAsync(true);
 					await Import(_railways, _stations);
-					errorCount = 0;
+					_errorCount = 0;
 				}
 				catch (Exception ex)
 				{
@@ -303,7 +303,7 @@ namespace TokyoSubwayView.Models.Metro
 				{
 					_stations = await MetroAccessor.GetStationsAsync(true);
 					await Import(_railways, _stations);
-					errorCount = 0;
+					_errorCount = 0;
 				}
 				catch (Exception ex)
 				{
@@ -316,14 +316,14 @@ namespace TokyoSubwayView.Models.Metro
 
 		public async Task<Train[]> GetTrainsAsync(TimeSpan timeLength)
 		{
-			if (((_trains == null) || (cachedTime + timeLength < DateTimeOffset.Now))
+			if (((_trains == null) || (_cachedTime + timeLength < DateTimeOffset.Now))
 				&& IsConnectionAvailable)
 			{
 				try
 				{
 					_trains = await MetroAccessor.GetTrainsAsync();
-					cachedTime = DateTimeOffset.Now;
-					errorCount = 0;
+					_cachedTime = DateTimeOffset.Now;
+					_errorCount = 0;
 				}
 				catch (Exception ex)
 				{
@@ -338,10 +338,10 @@ namespace TokyoSubwayView.Models.Metro
 		{
 			var message = CheckException(ex);
 
-			if (!isCaching && IsConnectionAvailable)
+			if (!_isCaching && IsConnectionAvailable)
 			{
-				errorCount++;
-				if (errorCount < errorCountMax)
+				_errorCount++;
+				if (_errorCount < _errorCountMax)
 					return;
 			}
 
@@ -463,13 +463,13 @@ namespace TokyoSubwayView.Models.Metro
 
 		#region Load/Save
 
-		private const string dataFileName = "Data.xml";
+		private const string _dataFileName = "Data.xml";
 
 		public async Task LoadAsync()
 		{
 			var localFolder = ApplicationData.Current.LocalFolder;
 
-			var file = await localFolder.TryGetItemAsync(dataFileName) as StorageFile;
+			var file = await localFolder.TryGetItemAsync(_dataFileName) as StorageFile;
 			if (file == null)
 				return;
 
@@ -484,7 +484,7 @@ namespace TokyoSubwayView.Models.Metro
 		{
 			var localFolder = ApplicationData.Current.LocalFolder;
 
-			var file = await localFolder.CreateFileAsync(dataFileName, CreationCollisionOption.ReplaceExisting);
+			var file = await localFolder.CreateFileAsync(_dataFileName, CreationCollisionOption.ReplaceExisting);
 			using (var stream = await file.OpenStreamForWriteAsync())
 			{
 				var serializer = new DataContractSerializer(typeof(MetroManager));

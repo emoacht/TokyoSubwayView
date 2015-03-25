@@ -22,13 +22,13 @@ namespace TokyoSubwayView.Views
 {
 	public sealed partial class OptionsFlyout : SettingsFlyout
 	{
-		private readonly OptionsFlyoutViewModel optionsFlyoutViewModel;
+		private readonly OptionsFlyoutViewModel _optionsFlyoutViewModel;
 
 		public OptionsFlyout()
 		{
 			this.InitializeComponent();
 
-			optionsFlyoutViewModel = (OptionsFlyoutViewModel)this.DataContext;
+			_optionsFlyoutViewModel = (OptionsFlyoutViewModel)this.DataContext;
 
 			this.SetBinding(
 				RailwayIdsProperty,
@@ -77,8 +77,8 @@ namespace TokyoSubwayView.Views
 					{
 						var flyout = (OptionsFlyout)d;
 
-						flyout.optionsFlyoutViewModel.PopulateItems();
-						flyout.optionsFlyoutViewModel.SetItemDescriptions();
+						flyout._optionsFlyoutViewModel.PopulateItems();
+						flyout._optionsFlyoutViewModel.SetItemDescriptions();
 					}));
 
 		public bool IsInitiating
@@ -93,7 +93,7 @@ namespace TokyoSubwayView.Views
 				typeof(OptionsFlyout),
 				new PropertyMetadata(
 					false,
-					(d, e) => ((OptionsFlyout)d).optionsFlyoutViewModel.RaiseCanExecuteChanged()));
+					(d, e) => ((OptionsFlyout)d)._optionsFlyoutViewModel.RaiseCanExecuteChanged()));
 
 		#endregion
 
@@ -116,7 +116,7 @@ namespace TokyoSubwayView.Views
 					{
 						var flyout = (OptionsFlyout)d;
 
-						flyout.optionsFlyoutViewModel.SetItemDescriptions();
+						flyout._optionsFlyoutViewModel.SetItemDescriptions();
 						flyout.LoadLanguage((LanguageSubtag)e.NewValue);
 					}));
 

@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -8,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using TokyoSubwayView.Models.Exceptions;
 using Windows.Storage;
 using Windows.Web.Http;
@@ -19,16 +19,16 @@ namespace TokyoSubwayView.Models.Metro
 	{
 		#region Method (Public)
 
-		private const string railwaysCacheFileName = "Railways.json";
-		private const string stationsCacheFileName = "Stations.json";
-		private const string trainsUpdateFileName = "Trains.json";
+		private const string _railwaysCacheFileName = "Railways.json";
+		private const string _stationsCacheFileName = "Stations.json";
+		private const string _trainsUpdateFileName = "Trains.json";
 
 		public static async Task<Railway[]> GetRailwaysAsync(bool usesCache = false)
 		{
 			var uri = ComposeUri(InfoType.DataPoints, MethodType.Query, ComposeDataParameter(DataType.Railway));
 
 			var json = (usesCache)
-				? await GetStringCachedAsync(uri, railwaysCacheFileName)
+				? await GetStringCachedAsync(uri, _railwaysCacheFileName)
 				: await GetStringAsync(uri);
 
 			Debug.WriteLine("Railways\r\n" + json);
@@ -41,7 +41,7 @@ namespace TokyoSubwayView.Models.Metro
 			var uri = ComposeUri(InfoType.DataPoints, MethodType.Query, ComposeDataParameter(DataType.Station));
 
 			var json = (usesCache)
-				? await GetStringCachedAsync(uri, stationsCacheFileName)
+				? await GetStringCachedAsync(uri, _stationsCacheFileName)
 				: await GetStringAsync(uri);
 
 			Debug.WriteLine("Stations\r\n" + json);
@@ -116,7 +116,7 @@ namespace TokyoSubwayView.Models.Metro
 			return json;
 		}
 
-		private static DateTimeOffset lastUpdatedTime;
+		private static DateTimeOffset _lastUpdatedTime;
 
 		private static async Task<string> GetStringUpdatedAsync(Uri targetUri, string updateFileName)
 		{
@@ -129,9 +129,9 @@ namespace TokyoSubwayView.Models.Metro
 			{
 				var updatedTime = (await file.GetBasicPropertiesAsync()).DateModified;
 
-				if (lastUpdatedTime < updatedTime)
+				if (_lastUpdatedTime < updatedTime)
 				{
-					lastUpdatedTime = updatedTime;
+					_lastUpdatedTime = updatedTime;
 
 					json = await FileIO.ReadTextAsync(file);
 				}
@@ -145,15 +145,15 @@ namespace TokyoSubwayView.Models.Metro
 			return json;
 		}
 
-		private const int retryCountMax = 3; // Maximum retry count
-		private static readonly TimeSpan retryLength = TimeSpan.FromSeconds(3); // Waiting time length before retry
-		private static readonly TimeSpan timeoutLength = TimeSpan.FromSeconds(20); // Timeout length
+		private const int _retryCountMax = 3; // Maximum retry count
+		private static readonly TimeSpan _retryLength = TimeSpan.FromSeconds(3); // Waiting time length before retry
+		private static readonly TimeSpan _timeoutLength = TimeSpan.FromSeconds(20); // Timeout length
 
 		private static async Task<string> GetStringAsync(Uri targetUri)
 		{
 			int retryCount = 0;
 
-			using (var cts = new CancellationTokenSource(timeoutLength))
+			using (var cts = new CancellationTokenSource(_timeoutLength))
 			using (var filter = new HttpBaseProtocolFilter())
 			{
 				filter.CacheControl.ReadBehavior = HttpCacheReadBehavior.MostRecent;
@@ -163,7 +163,7 @@ namespace TokyoSubwayView.Models.Metro
 					while (true)
 					{
 						retryCount++;
-						var retryWait = retryLength;
+						var retryWait = _retryLength;
 
 						try
 						{
@@ -208,7 +208,7 @@ namespace TokyoSubwayView.Models.Metro
 							}
 							catch
 							{
-								if (retryCount >= retryCountMax)
+								if (retryCount >= _retryCountMax)
 									throw;
 							}
 
@@ -232,7 +232,7 @@ namespace TokyoSubwayView.Models.Metro
 
 		#region Uri
 
-		private const string endPointUrl = "https://api.tokyometroapp.jp/api/v2/";
+		private const string _endPointUrl = "https://api.tokyometroapp.jp/api/v2/";
 
 		private enum InfoType
 		{
@@ -269,7 +269,7 @@ namespace TokyoSubwayView.Models.Metro
 
 		private static Uri ComposeUri(InfoType info, MethodType method, string parameter)
 		{
-			var sb = new StringBuilder(endPointUrl);
+			var sb = new StringBuilder(_endPointUrl);
 			sb.Append((info == InfoType.DataPoints) ? "datapoints" : "places");
 			sb.Append((method == MethodType.Query) ? '?' : '/');
 			sb.Append(parameter);

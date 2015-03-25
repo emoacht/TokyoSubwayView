@@ -1,5 +1,4 @@
-﻿using Microsoft.Xaml.Interactivity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,6 +6,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
+using Microsoft.Xaml.Interactivity;
 using Windows.Devices.Input;
 using Windows.Foundation;
 using Windows.UI.Xaml;
@@ -32,7 +32,7 @@ namespace TokyoSubwayView.Views.Behaviors
 		}
 		private Selector _associatedSelector;
 
-		private CompositeDisposable disposer;
+		private CompositeDisposable _subscription;
 
 		public void Attach(DependencyObject associatedObject)
 		{
@@ -44,9 +44,8 @@ namespace TokyoSubwayView.Views.Behaviors
 				return;
 			}
 
+			_subscription = new CompositeDisposable();
 			AssociatedViewer.Loaded += OnLoaded;
-
-			disposer = new CompositeDisposable();
 		}
 
 		public void Detach()
@@ -54,9 +53,8 @@ namespace TokyoSubwayView.Views.Behaviors
 			if (this.AssociatedObject == null)
 				return;
 
+			_subscription.Dispose();
 			AssociatedViewer.Loaded -= OnLoaded;
-
-			disposer.Dispose();
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
@@ -64,7 +62,7 @@ namespace TokyoSubwayView.Views.Behaviors
 			ViewerSize = new Size(AssociatedViewer.ActualWidth, AssociatedViewer.ActualHeight);
 
 			// ViewChanged event
-			disposer.Add(
+			_subscription.Add(
 				Observable.FromEventPattern<ScrollViewerViewChangedEventArgs>(
 					h => AssociatedViewer.ViewChanged += h,
 					h => AssociatedViewer.ViewChanged -= h)
@@ -73,7 +71,7 @@ namespace TokyoSubwayView.Views.Behaviors
 				.Subscribe(e_ => SaveInViewerCenterPosition()));
 
 			// SizeChanged event
-			disposer.Add(
+			_subscription.Add(
 				Observable.FromEvent<SizeChangedEventHandler, SizeChangedEventArgs>(
 					h => (sender_, e_) => h(e_),
 					h => AssociatedViewer.SizeChanged += h,
@@ -147,7 +145,7 @@ namespace TokyoSubwayView.Views.Behaviors
 							((ScrollViewerSelectorBehavior)d).RestoreInViewerCenterPosition();
 					}));
 
-		private bool isInitial = true;
+		private bool _isInitial = true;
 
 		private void RestoreInViewerCenterPosition()
 		{
@@ -156,9 +154,9 @@ namespace TokyoSubwayView.Views.Behaviors
 
 			var inViewerCenterPosition = new Point(AssociatedViewer.ActualWidth / 2D, AssociatedViewer.ActualHeight / 2D);
 
-			RestoreInViewerPosition(inViewerCenterPosition, InSelectorCenterPosition, ViewerZoomFactor, isInitial);
+			RestoreInViewerPosition(inViewerCenterPosition, InSelectorCenterPosition, ViewerZoomFactor, _isInitial);
 
-			isInitial = false;
+			_isInitial = false;
 
 			Debug.WriteLine("Restored center position and zoom factor. {0}", InSelectorCenterPosition);
 		}
@@ -234,7 +232,7 @@ namespace TokyoSubwayView.Views.Behaviors
 
 		private void StartListenTap()
 		{
-			disposer.Add(
+			_subscription.Add(
 				Observable.FromEventPattern<TappedEventHandler, TappedRoutedEventArgs>(
 					h => h.Invoke,
 					h => AssociatedViewer.Tapped += h,
@@ -272,11 +270,11 @@ namespace TokyoSubwayView.Views.Behaviors
 			}
 		}
 
-		private const double zoomNotchFactor = 0.18F;
+		private const double _zoomNotchFactor = 0.18F;
 
 		private void ZoomIn(Point inViewerPosition, Point inSelectorPosition)
 		{
-			var factor = Math.Min(9F, AssociatedViewer.ZoomFactor * (float)(1D + zoomNotchFactor));
+			var factor = Math.Min(9F, AssociatedViewer.ZoomFactor * (float)(1D + _zoomNotchFactor));
 
 			RestoreInViewerPosition(inViewerPosition, inSelectorPosition, factor);
 
@@ -285,7 +283,7 @@ namespace TokyoSubwayView.Views.Behaviors
 
 		private void ZoomOut(Point inViewerPosition, Point inSelectorPosition)
 		{
-			var factor = Math.Max(1F, AssociatedViewer.ZoomFactor / (float)(1D + zoomNotchFactor));
+			var factor = Math.Max(1F, AssociatedViewer.ZoomFactor / (float)(1D + _zoomNotchFactor));
 
 			RestoreInViewerPosition(inViewerPosition, inSelectorPosition, factor);
 
@@ -315,7 +313,7 @@ namespace TokyoSubwayView.Views.Behaviors
 					h => AssociatedViewer.ManipulationCompleted += h,
 					h => AssociatedViewer.ManipulationCompleted -= h);
 
-			disposer.Add(manipulationDelta
+			_subscription.Add(manipulationDelta
 				.SkipUntil(manipulationStarted.Do(e => OnManipulationStarted(e)))
 				.TakeUntil(manipulationCompleted.Do(e => OnManipulationCompleted(e)))
 				.Throttle(TimeSpan.FromMilliseconds(10)) // 10 msec throttling
@@ -324,10 +322,10 @@ namespace TokyoSubwayView.Views.Behaviors
 				.Subscribe(e => OnManipulationDelta(e)));
 		}
 
-		private Point startPosition;
-		private double startHorizontalOffset;
-		private double startVerticalOffset;
-		private float startZoomFactor;
+		private Point _startPosition;
+		private double _startHorizontalOffset;
+		private double _startVerticalOffset;
+		private float _startZoomFactor;
 
 		private void OnManipulationStarted(ManipulationStartedRoutedEventArgs e)
 		{
@@ -336,10 +334,10 @@ namespace TokyoSubwayView.Views.Behaviors
 
 			try
 			{
-				startPosition = e.Position;
-				startHorizontalOffset = AssociatedViewer.HorizontalOffset;
-				startVerticalOffset = AssociatedViewer.VerticalOffset;
-				startZoomFactor = AssociatedViewer.ZoomFactor;
+				_startPosition = e.Position;
+				_startHorizontalOffset = AssociatedViewer.HorizontalOffset;
+				_startVerticalOffset = AssociatedViewer.VerticalOffset;
+				_startZoomFactor = AssociatedViewer.ZoomFactor;
 			}
 			catch (Exception ex)
 			{
@@ -362,16 +360,16 @@ namespace TokyoSubwayView.Views.Behaviors
 			{
 				float? factor = null;
 
-				var offsetX = startHorizontalOffset - e.Cumulative.Translation.X;
-				var offsetY = startVerticalOffset - e.Cumulative.Translation.Y;
+				var offsetX = _startHorizontalOffset - e.Cumulative.Translation.X;
+				var offsetY = _startVerticalOffset - e.Cumulative.Translation.Y;
 
 				var currentScale = e.Cumulative.Scale;
 				if (currentScale != 1F)
 				{
-					factor = startZoomFactor * currentScale;
+					factor = _startZoomFactor * currentScale;
 
-					offsetX = offsetX * currentScale + startPosition.X * (currentScale - 1F);
-					offsetY = offsetY * currentScale + startPosition.Y * (currentScale - 1F);
+					offsetX = offsetX * currentScale + _startPosition.X * (currentScale - 1F);
+					offsetY = offsetY * currentScale + _startPosition.Y * (currentScale - 1F);
 				}
 
 				//Debug.WriteLine("OffsetX:{0} OffsetY:{1} factor:{2}", offsetX, offsetY, factor);
@@ -418,7 +416,7 @@ namespace TokyoSubwayView.Views.Behaviors
 					h => AssociatedSelector.PointerCaptureLost += h,
 					h => AssociatedSelector.PointerCaptureLost -= h));
 
-			disposer.Add(pointerMoved
+			_subscription.Add(pointerMoved
 				.SkipUntil(pointerPressed.Do(e => OnPointerPressed(e)))
 				.TakeUntil(pointerUnpressed.Do(e => OnPointerUnpressed(e)))
 				.Throttle(TimeSpan.FromMilliseconds(10)) // 10 msec throttling
@@ -427,8 +425,8 @@ namespace TokyoSubwayView.Views.Behaviors
 				.Subscribe(e => OnPointerMoved(e)));
 		}
 
-		private double startHorizontalOffsetPosition;
-		private double startverticalOffsetPosition;
+		private double _startHorizontalOffsetPosition;
+		private double _startverticalOffsetPosition;
 
 		private void OnPointerPressed(PointerRoutedEventArgs e)
 		{
@@ -437,8 +435,8 @@ namespace TokyoSubwayView.Views.Behaviors
 
 			var startPosition = e.GetCurrentPoint(AssociatedViewer).Position;
 
-			startHorizontalOffsetPosition = AssociatedViewer.HorizontalOffset + startPosition.X;
-			startverticalOffsetPosition = AssociatedViewer.VerticalOffset + startPosition.Y;
+			_startHorizontalOffsetPosition = AssociatedViewer.HorizontalOffset + startPosition.X;
+			_startverticalOffsetPosition = AssociatedViewer.VerticalOffset + startPosition.Y;
 		}
 
 		private void OnPointerUnpressed(PointerRoutedEventArgs e)
@@ -453,8 +451,8 @@ namespace TokyoSubwayView.Views.Behaviors
 
 			var position = e.GetCurrentPoint(AssociatedViewer).Position;
 
-			var offsetX = startHorizontalOffsetPosition - position.X;
-			var offsetY = startverticalOffsetPosition - position.Y;
+			var offsetX = _startHorizontalOffsetPosition - position.X;
+			var offsetY = _startverticalOffsetPosition - position.Y;
 
 			//Debug.WriteLine("OffsetX:{0} OffsetY:{1}", offsetX, offsetY);
 
